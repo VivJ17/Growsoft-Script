@@ -53,6 +53,8 @@
             padding: 20px;
             margin-bottom: 25px;
             transition: transform 0.3s, box-shadow 0.3s;
+            /* Ensures the card doesn't exceed container width */
+            overflow: hidden; 
         }
 
         .script-card:hover {
@@ -68,7 +70,7 @@
             font-size: 1.5em;
         }
         
-        /* Code Block Styling */
+        /* Code Block Styling (FIXED: Added max-width and overflow-x) */
         .code-preview {
             background-color: var(--code-bg);
             padding: 15px;
@@ -76,14 +78,27 @@
             margin-top: 15px;
             max-height: 200px; 
             overflow-y: auto;
+            /* Allows horizontal scrolling inside the block if needed */
+            overflow-x: auto; 
             border: 1px solid var(--border-color);
         }
         
         .code-preview code, .full-code code {
             font-family: 'Consolas', 'Monaco', monospace;
             line-height: 1.4;
-            white-space: pre; 
             display: block;
+            /* Ensures lines wrap instead of overflowing the container and border */
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+        }
+
+        /* Re-enable 'pre' behavior only for the full-code view if lines are very long,
+           but ensure the 'full-code' div has overflow-x: auto */
+        .full-code code {
+             white-space: pre; /* Allows long lines to exist */
+        }
+        .full-code {
+             overflow-x: auto; /* Adds horizontal scrollbar for long lines */
         }
         
         /* Button Styling */
@@ -127,6 +142,25 @@
     </header>
 
     <div class="container">
+        <div class="script-card" id="toc">
+            <h2>📜 Script Index</h2>
+            <div style="column-count: 2; column-gap: 30px;">
+                <ul>
+                    <li><a href="#lockconverter" style="color: var(--accent-color); text-decoration: none;">💰 Lock Converter.lua</a></li>
+                    <li><a href="#opc" style="color: var(--accent-color); text-decoration: none;">⏳ Online Point Currency.lua</a></li>
+                    <li><a href="#dynamicgacha" style="color: var(--accent-color); text-decoration: none;">🎰 Dynamic Gacha.lua</a></li>
+                    <li><a href="#gacha" style="color: var(--accent-color); text-decoration: none;">⛏️ Gacha.lua (Block Break Drop)</a></li>
+                    <li><a href="#featureworld" style="color: var(--accent-color); text-decoration: none;">🌟 FeatureWorld.lua</a></li>
+                </ul>
+                <ul>
+                    <li><a href="#quickdrop" style="color: var(--accent-color); text-decoration: none;">📦 QuickDrop.lua</a></li>
+                    <li><a href="#givetoken" style="color: var(--accent-color); text-decoration: none;">🪙 GiveServerToken.lua</a></li>
+                    <li><a href="#fishexchange" style="color: var(--accent-color); text-decoration: none;">🎣 Fish Exchange.lua</a></li>
+                    <li><a href="#sigilofktesh" style="color: var(--accent-color); text-decoration: none;">🔮 SigilOfKtesh.lua</a></li>
+                    <li><a href="#bonusdrop" style="color: var(--accent-color); text-decoration: none;">✨ BonusDrop.lua</a></li>
+                </ul>
+            </div>
+        </div>
         
         <div class="script-card" id="lockconverter">
             <h2>💰 Lock Converter.lua</h2>
@@ -142,6 +176,9 @@ local BLUE_GEM_LOCK = 7188
 local BLACK_GEM_LOCK = 20628
 -- If you want to change the Golden Gem Lock with your Custom Lock, just change the ID and you are done!
 local GOLDEN_GEM_LOCK = 25006
+
+-- Change this if your max inventory is not 200 (like 250 or 100).
+local MAX_INVENTORY = 200
 ...
                 </code>
             </div>
@@ -343,6 +380,9 @@ local KEY_STRING = "ONLINE_POINT_CURRENCY_SERVER_" .. getServerID()
 local PLAYER_NAME_MAP = PLAYER_NAME_MAP or {}
 local ONLINE_POINT_CURRENCY = {}
 local playerTimers = {}
+
+-- Market Name and Currency Name (Editable)
+local marketName = "Online Point Market"
 ...
                 </code>
             </div>
@@ -681,7 +721,16 @@ local dropSets = {
         {itemID = 10170, chance = 0.01},
         {itemID = 10168, chance = 1},
     },
-...
+    
+    -- Set 2: Event 2 (Ex. Phoenix Rising)
+    {
+        {itemID = 2, chance = 0.10},
+        {itemID = 10, chance = 0.25},
+        {itemID = 1674, chance = 0.01},
+        {itemID = 9730, chance = 0.15},
+        {itemID = 8588, chance = 0.10},
+    },
+    ...
                 </code>
             </div>
 
@@ -803,7 +852,14 @@ local dropSets = {
             {itemID = 242, chance = 0.10},
         }
     },
-...
+
+    [10] = {
+        name = "Rock",
+        drops = {
+            {itemID = 242, chance = 0.76},
+        }
+    },
+    ...
                 </code>
             </div>
 
@@ -906,6 +962,16 @@ local colorMap = {
     blue         = 0xFF0000FF,
     lightpurple  = 0xFF00FFFF,
     cyan         = 0xFFFF00FF,
+    lightviolet  = 0xFF808080,
+    lightgray    = 0xFFD3D3D3,
+    lightblue    = 0xFF800080,
+    lightbrown   = 1215870207,
+    green        = 64566271,
+    lightgreen  = 0x03FFA0A0,
+    randomColorOne = 1563414015,
+    randomColorTwo = 1535082495,
+    transparent = 4278190080,
+}
 ...
                 </code>
             </div>
@@ -1094,6 +1160,12 @@ local dropSets = {
         { itemID = 20616, amount = 1000 }
     }
 }
+
+local Roles = {
+    ROLE_DEVELOPER = 51
+}
+
+local dropCommand = {
 ...
                 </code>
             </div>
@@ -1190,6 +1262,12 @@ local removeCommand = "removetoken"
 local Roles = {
     ROLE_DEVELOPER = 51,
 }
+
+registerLuaCommand({
+    command = giveCommand,
+    roleRequired = Roles.ROLE_DEVELOPER,
+    description = "Give server token to a player."
+})
 ...
                 </code>
             </div>
@@ -1300,6 +1378,11 @@ local Roles = {
 local CURRENCY_ITEM_ID = 242
 local PRIZE_AMOUNT_PER_FISH = 5
 local FISH_WORLD = "FISHING"
+
+-- Tier 1 = 1 to 50 lbs
+-- Tier 2 = 51 to 100 lbs
+-- Tier 3 = 101 to 250 lbs
+-- They act as Multiplier (PRIZE_AMOUNT_PER_FISH * Tier)
 ...
                 </code>
             </div>
@@ -1580,6 +1663,11 @@ onPlayerConsumableCallback(function(world, player, tile, clickedPlayer, itemID)
     local currentEvent = getTodaysEvents()
 
     if itemID ~= SIGIL_OF_KTESH_ID then return false end
+
+    if not string.find(currentEvent, "Halloween Day") then
+        player:onTalkBubble(player:getNetID(), "`#The sigil has no power today...", 0)
+        return true
+    end
 ...
                 </code>
             </div>
@@ -1622,7 +1710,7 @@ end)
                 </code>
             </div>
         </div>
-
+        
         <div class="script-card" id="bonusdrop">
             <h2>✨ BonusDrop.lua</h2>
             <p>A simple system to add extra (bonus) drops with a set chance when a specific block is broken.</p>
@@ -1637,6 +1725,11 @@ math.randomseed(os.time())
 local drops = {
     [2] = {
         { dropID = 242, amount = 1, chance = 10 }, -- 10% chance
+        { dropID = 500, amount = 1, chance = 5 },  -- 5% chance
+    },
+}
+
+local function shouldDrop(chancePercent)
 ...
                 </code>
             </div>
@@ -1713,11 +1806,23 @@ end)
             const codeElement = document.getElementById(id);
             const textToCopy = codeElement.innerText;
             
+            // Use the modern clipboard API
             navigator.clipboard.writeText(textToCopy).then(() => {
                 alert('Code successfully copied to clipboard!');
             }).catch(err => {
                 console.error('Failed to copy:', err);
-                alert('Failed to copy code. Your browser may not support this feature.');
+                // Fallback for older browsers
+                const tempTextarea = document.createElement('textarea');
+                tempTextarea.value = textToCopy;
+                document.body.appendChild(tempTextarea);
+                tempTextarea.select();
+                try {
+                    document.execCommand('copy');
+                    alert('Code successfully copied to clipboard!');
+                } catch (e) {
+                    alert('Failed to copy code. Please copy manually.');
+                }
+                document.body.removeChild(tempTextarea);
             });
         }
     </script>
