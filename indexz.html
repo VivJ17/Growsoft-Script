@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Lua Script Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Modern Design System Variables --- */
+        :root {
+            --bg-color: #0d1117; 
+            --card-bg: #161b22; 
+            --text-color: #c9d1d9; 
+            --accent-color: #38a169; 
+            --border-color: #30363d; 
+            --code-bg: #010409; 
+            --button-bg: #216e39; 
+            --button-hover: #238636;
+            --premium-color: #ffc107;
+        }
+
+        /* --- Global Reset and Typography --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            color: white;
+            line-height: 1.2;
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        a:hover {
+            color: var(--button-hover);
+        }
+
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr; 
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            padding: 30px 20px 30px 30px;
+            border-right: 1px solid var(--border-color);
+            position: sticky; 
+            top: 66px; 
+            height: calc(100vh - 66px);
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            margin-top: 0;
+            padding-bottom: 10px;
+            font-size: 1.2em;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 5px 0;
+            color: var(--text-color);
+        }
+        
+        .sidebar a:hover {
+            color: var(--accent-color);
+            transform: translateX(3px);
+        }
+
+        .content-area {
+            padding: 30px 40px;
+        }
+
+        .script-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .script-card h2 {
+            font-size: 1.8em;
+            color: var(--accent-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .code-preview {
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            max-height: 200px; 
+            overflow: auto; 
+            border: 1px solid var(--border-color);
+        }
+        
+        .code-preview code, .full-code code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.5;
+            display: block;
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+        }
+
+        .full-code code {
+            white-space: pre; 
+        }
+        .full-code {
+             overflow-x: auto; 
+        }
+        
+        .actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            background-color: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        
+        .btn:hover {
+            background-color: var(--button-hover);
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .full-code {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--code-bg);
+            border-radius: 6px;
+            border: 1px solid var(--accent-color);
+        }
+        
+        /* --- Modal Payment Styling --- */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 2000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.8); 
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 5% auto; 
+            padding: 30px;
+            border: 1px solid var(--premium-color);
+            width: 80%; 
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-btn {
+            color: var(--text-color);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: var(--premium-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .payment-info p {
+            background-color: #010409;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px dashed var(--border-color);
+            font-size: 1.1em;
+            word-break: break-all;
+        }
+        
+        .payment-info .code {
+            color: var(--premium-color);
+            font-weight: 700;
+        }
+        
+        .payment-info .total-price {
+            font-size: 1.5em;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .copy-button {
+            padding: 8px 15px;
+            background-color: var(--premium-color);
+            color: var(--card-bg);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .copy-button:hover {
+            background-color: #e6b200;
+        }
+
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 900px) {
+            .main-layout {
+                grid-template-columns: 1fr; 
+            }
+
+            .sidebar {
+                position: static; 
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 20px;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+            
+            .navbar {
+                padding: 10px 20px;
+            }
+            
+            .sidebar h2 {
+                text-align: center;
+            }
+            
+            .sidebar ul {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 5px 15px;
+            }
+
+            .sidebar li {
+                margin-bottom: 0;
+            }
+
+            .sidebar a {
+                padding: 5px 10px;
+                border-radius: 4px;
+                background-color: rgba(56, 161, 105, 0.1);
+            }
+            
+            .modal-content {
+                width: 90%;
+                margin: 20% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <h1>💎 Lua Script Library</h1>
+    </nav>
+    
+    <div class="main-layout">
+        
+        <aside class="sidebar" id="toc">
+            <h2>📜 Script Index</h2>
+            <ul>
+                <li><a href="#lockconverter">💰 Lock Converter.lua</a></li>
+                <li><a href="#opc">⏳ Online Point Currency.lua</a></li>
+                <li><a href="#dynamicgacha">🎰 Dynamic Gacha.lua</a></li>
+                <li><a href="#gacha">⛏️ Gacha.lua (Block Break Drop)</a></li>
+                <li><a href="#featureworld">🌟 FeatureWorld.lua</a></li>
+                <li><a href="#quickdrop">📦 QuickDrop.lua</a></li>
+                <li><a href="#givetoken">🪙 GiveServerToken.lua</a></li>
+                <li><a href="#fishexchange">🎣 Fish Exchange.lua</a></li>
+                <li><a href="#sigilofktesh">🔮 SigilOfKtesh.lua</a></li>
+                <li><a href="#bonusdrop">✨ BonusDrop.lua</a></li>
+                
+                <li style="margin-top: 15px;">
+                    <a href="#premium-scripts" style="color: var(--premium-color); font-weight: 700; border-top: 1px solid var(--border-color); padding-top: 10px;">⭐ PREMIUM SCRIPTS</a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="content-area">
+            
+            <div class="script-card" style="margin-bottom: 40px; border: 1px solid var(--accent-color);">
+                <h1>Welcome to the Professional Script Documentation.</h1>
+                <p style="font-size: 1.1em; color: var(--text-color);">This library contains optimized and well-commented Lua scripts for your server. Use the index on the left to navigate, or scroll down to browse all scripts.</p>
+            </div>
+            
+            <div class="script-card" id="lockconverter">
+                <h2>💰 Lock Converter.lua</h2>
+                <p>Allows players to convert locks (WL, DL, BGL, etc.) through an interactive in-game dialog.</p>
+                <div class="code-preview"><code>print("(Loaded) Lock Converter Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('lockconverter-code')">View Full Code</button></div>
+                <div class="full-code" id="lockconverter-code"><code id="lockconverter-full-code">... (Full Code LockConverter.lua) ...</code></div>
+            </div>
+            
+            <div class="script-card" id="opc">
+                <h2>⏳ Online Point Currency.lua</h2>
+                <p>A server currency system earned based on player online time, featuring a market and leaderboard.</p>
+                <div class="code-preview"><code>print("(Loaded) OPC Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('opc-code')">View Full Code</button></div>
+                <div class="full-code" id="opc-code"><code id="opc-full-code">... (Full Code OnlinePointCurrency.lua) ...</code></div>
+            </div>
+
+            <div class="script-card" id="dynamicgacha">
+                <h2>🎰 Dynamic Gacha.lua</h2>
+                <p>A dynamic Gacha/Drop system allowing easy modification of drop sets and chances for different events.</p>
+                <div class="code-preview"><code>print("(Loaded) Dynamic Gacha System Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('dynamicgacha-code')">View Full Code</button></div>
+                <div class="full-code" id="dynamicgacha-code"><code id="dynamicgacha-full-code">... (Full Code DynamicGacha.lua) ...</code></div>
+            </div>
+
+            <div class="script-card" id="gacha">
+                <h2>⛏️ Gacha.lua (Block Break Drop)</h2>
+                <p>A Gacha system that determines drops based on the type of block broken (e.g., Dirt, Rock).</p>
+                <div class="code-preview"><code>print("(Loaded) Gacha Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('gacha-code')">View Full Code</button></div>
+                <div class="full-code" id="gacha-code"><code id="gacha-full-code">... (Full Code Gacha.lua) ...</code></div>
+            </div>
+
+            <div class="script-card" id="featureworld">
+                <h2>🌟 FeatureWorld.lua</h2>
+                <p>Admin tool to dynamically add or remove featured worlds from the World Menu with custom colors.</p>
+                <div class="code-preview"><code>print("(Loaded) Feature World Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('featureworld-code')">View Full Code</button></div>
+                <div class="full-code" id="featureworld-code"><code id="featureworld-full-code">... (Full Code FeatureWorld.lua) ...</code></div>
+            </div>
+
+            <div class="script-card" id="quickdrop">
+                <h2>📦 QuickDrop.lua</h2>
+                <p>Admin command (`/drops`) to instantly drop large quantities of predefined items in a set (for events or giveaways).</p>
+                <div class="code-preview"><code>print("(Loaded) Quick Drop Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('quickdrop-code')">View Full Code</button></div>
+                <div class="full-code" id="quickdrop-code"><code id="quickdrop-full-code">... (Full Code QuickDrop.lua) ...</code></div>
+            </div>
+
+            <div class="script-card" id="givetoken">
+                <h2>🪙 GiveServerToken.lua</h2>
+                <p>Admin commands (`/givetoken` and `/removetoken`) for managing server-side currency/tokens for players.</p>
+                <div class="code-preview"><code>print("(Loaded) Give / Remove Server Token Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('givetoken-code')">View Full Code</button></div>
+                <div class="full-code" id="givetoken-code"><code id="givetoken-full-code">... (Full Code GiveServerToken.lua) ...</code></div>
+            </div>
+
+            <div class="script-card" id="fishexchange">
+                <h2>🎣 Fish Exchange.lua</h2>
+                <p>Allows players to sell their inventory of fish for a specified server currency (e.g., World Locks) via dialog.</p>
+                <div class="code-preview"><code>print("(Loaded) Fish Exchange Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('fishexchange-code')">View Full Code</button></div>
+                <div class="full-code" id="fishexchange-code"><code id="fishexchange-full-code">... (Full Code FishExchange.lua) ...</code></div>
+            </div>
+
+            <div class="script-card" id="sigilofktesh">
+                <h2>🔮 SigilOfKtesh.lua</h2>
+                <p>Handles the use of a special item (Sigil of K'tesh), warping the player only during the Halloween event and in the correct world.</p>
+                <div class="code-preview"><code>print("(Loaded) Sigil Of K'tesh Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('sigilofktesh-code')">View Full Code</button></div>
+                <div class="full-code" id="sigilofktesh-code"><code id="sigilofktesh-full-code">... (Full Code SigilOfKtesh.lua) ...</code></div>
+            </div>
+        
+            <div class="script-card" id="bonusdrop">
+                <h2>✨ BonusDrop.lua</h2>
+                <p>A simple system to add extra (bonus) drops with a set chance when a specific block is broken.</p>
+                <div class="code-preview"><code>print("(Loaded) Bonus Drop Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('bonusdrop-code')">View Full Code</button></div>
+                <div class="full-code" id="bonusdrop-code"><code id="bonusdrop-full-code">... (Full Code BonusDrop.lua) ...</code></div>
+            </div>
+            
+            <div class="script-card" id="premium-scripts" style="border: 2px solid var(--premium-color);">
+                <h2><span style="color: var(--premium-color);">⭐ PREMIUM SCRIPT SHOWCASE</span></h2>
+                <p>Bagian ini menampilkan skrip-skrip eksklusif yang dioptimalkan, memiliki fitur kompleks, dan memiliki sistem pembayaran otomatis.</p>
+                <br>
+                
+                <div style="border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 20px; background-color: #1a222c;">
+                    <h3 style="margin-top: 0; color: var(--premium-color);">🛡️ Anti-Cheat Pro V2</h3>
+                    <p>Sistem anti-cheat berbasis server yang canggih untuk mendeteksi speedhack, flyhack, dan auto-harvest dengan akurasi tinggi.</p>
+                    <p style="margin: 5px 0 10px 0;"><b>Harga:</b> <span id="ac-price" style="color: var(--accent-color); font-weight: 700;">Rp 100.000</span></p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <p style="margin: 0; font-size: 1.1em;"><b>Status:</b> <span style="color: var(--accent-color);">Tersedia</span></p>
+                        <button class="btn" style="background-color: var(--premium-color); color: var(--card-bg); font-weight: 700;" onclick="openPaymentModal('Anti-Cheat Pro V2', 100000)">💰 Beli Sekarang (DANA Auto)</button>
+                    </div>
+                </div>
+
+                <div style="border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 20px; background-color: #1a222c;">
+                    <h3 style="margin-top: 0; color: var(--premium-color);">🎯 Daily Quest System</h3>
+                    <p>Tambahkan sistem Misi Harian yang dapat dikonfigurasi sepenuhnya untuk meningkatkan engagement pemain. </p>
+                    <p style="margin: 5px 0 10px 0;"><b>Harga Mulai:</b> <span style="color: var(--premium-color); font-weight: 700;">Hubungi Admin</span></p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <p style="margin: 0; font-size: 1.1em;"><b>Status:</b> <span style="color: var(--accent-color);">Tersedia</span></p>
+                        <button class="btn" style="background-color: var(--premium-color); color: var(--card-bg); font-weight: 700;" onclick="alert('Hubungi Admin atau Owner server Anda untuk informasi pembelian skrip premium ini.')">Contact Admin</button>
+                    </div>
+                </div>
+
+                <p style="border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 15px; font-style: italic; text-align: center;">Untuk detail skrip premium lainnya, silakan hubungi <span style="color: var(--premium-color);">Pemilik Website</span>.</p>
+            </div>
+            
+        </main>
+    </div>
+    
+    <div id="payment-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closePaymentModal()">&times;</span>
+        <h2 style="color: var(--premium-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">Langkah Pembayaran DANA</h2>
+        
+        <p style="font-size: 1.1em; margin-bottom: 20px;">Anda akan membeli <b id="script-name-modal"></b>.</p>
+        
+        <div class="payment-info">
+            <p>
+                Total Harga (Wajib Transfer Tepat):<br>
+                <span class="total-price" id="total-price-modal"></span>
+            </p>
+            
+            <p>
+                Nomor DANA Tujuan (Atas Nama Admin):<br>
+                <span class="code" id="dana-number">0895338912670</span>
+                <button class="copy-button" onclick="copyToClipboard('dana-number', this)">Salin</button>
+            </p>
+
+            <p style="border: 1px solid red; background-color: #3b1616;">
+                <span style="color: #ff4d4d; font-weight: bold;">PENTING:</span> Masukkan Kode Invoice berikut di kolom Catatan/Pesan saat transfer DANA.
+                <br>
+                <span class="code" id="invoice-id-modal">XXXX-XXXX-XXXX</span>
+                <button class="copy-button" onclick="copyToClipboard('invoice-id-modal', this)">Salin</button>
+            </p>
+            
+        </div>
+        
+        <h3 style="color: var(--accent-color); margin-top: 25px;">⚠ Implementasi Otomatis</h3>
+        <p style="font-size: 0.9em; color: #888;">Tekan tombol di bawah setelah Anda yakin transfer sudah dilakukan **dengan Kode Invoice yang benar**.</p>
+        
+        <button class="btn" style="width: 100%; background-color: var(--button-bg); margin-top: 20px;" onclick="checkStatus()">Saya Sudah Transfer (Periksa Otomatis)</button>
+      </div>
+    </div>
+
+    <script>
+        const DANA_NUMBER = "0895338912670";
+        
+        let currentInvoiceId = '';
+        let currentAmount = 0;
+        let currentScript = '';
+        
+        function generateInvoiceId() {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let invoice = '';
+            for (let i = 0; i < 12; i++) {
+                invoice += chars.charAt(Math.floor(Math.random() * chars.length));
+                if (i === 3 || i === 7) {
+                    invoice += '-';
+                }
+            }
+            return 'INV-' + invoice;
+        }
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(number);
+        }
+
+        function openPaymentModal(scriptName, amount) {
+            currentScript = scriptName;
+            currentAmount = amount;
+            currentInvoiceId = generateInvoiceId();
+
+            document.getElementById('script-name-modal').textContent = scriptName;
+            document.getElementById('total-price-modal').textContent = formatRupiah(amount);
+            document.getElementById('invoice-id-modal').textContent = currentInvoiceId;
+            document.getElementById('dana-number').textContent = DANA_NUMBER;
+            document.getElementById('payment-modal').style.display = 'block';
+        }
+
+        function closePaymentModal() {
+            document.getElementById('payment-modal').style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('payment-modal');
+            if (event.target === modal) {
+                closePaymentModal();
+            }
+        }
+
+        function copyToClipboard(id, button) {
+            const textToCopy = document.getElementById(id).textContent.trim();
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Tersalin!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 1500);
+            }).catch(err => {
+                alert('Gagal menyalin. Salin manual: ' + textToCopy);
+            });
+        }
+        
+        // =========================================================
+        // ✅ FUNGSI KRITIS: Memanggil file PHP (Logik Server)
+        // =========================================================
+        function checkStatus() {
+            if (currentInvoiceId === '' || currentAmount === 0) {
+                alert("Terjadi kesalahan. Silakan buka ulang modal pembayaran.");
+                return;
+            }
+            
+            // File PHP harus berada di folder yang sama
+            const apiEndpoint = 'check_payment.php'; 
+            
+            const data = {
+                invoice_id: currentInvoiceId,
+                amount: currentAmount
+            };
+
+            const checkButton = document.querySelector('.modal-content .btn:last-child');
+            const originalText = checkButton.textContent;
+            checkButton.textContent = 'Memeriksa Status...';
+            checkButton.disabled = true;
+
+            fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                alert(`Hasil Pemeriksaan Server:\n\nStatus: ${result.status}\nPesan: ${result.message}`);
+                
+                if (result.status === 'success' || result.status === 'completed') {
+                    // Jika sukses, tutup modal dan beri notifikasi sukses
+                    closePaymentModal();
+                    alert("Pembayaran Terdeteksi & Lunas! Admin Anda telah menerima notifikasi Discord!");
+                }
+            })
+            .catch(error => {
+                alert('Gagal menghubungi server backend. Pastikan file check_payment.php sudah diunggah dan server berjalan.');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                checkButton.textContent = originalText;
+                checkButton.disabled = false;
+            });
+        }
+        // =========================================================
+
+        function toggleCode(id) {
+            const element = document.getElementById(id);
+            if (element.style.display === 'none' || element.style.display === '') {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
