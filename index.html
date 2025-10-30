@@ -4,104 +4,170 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professional Lua Script Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- Professional Dark Mode CSS --- */
+        /* --- Modern Design System Variables --- */
         :root {
-            --bg-color: #1e1e1e;
-            --text-color: #d4d4d4;
-            --card-bg: #2d2d30;
-            --accent-color: #4ec9b0; /* Mint Green */
-            --button-bg: #007acc; /* VS Code Blue */
-            --button-hover: #005f99;
-            --code-bg: #1c1c1c;
-            --border-color: #3e3e42;
+            /* GitHub/Vercel inspired dark background */
+            --bg-color: #0d1117; 
+            /* Slightly lighter card background */
+            --card-bg: #161b22; 
+            /* Light grey text for readability */
+            --text-color: #c9d1d9; 
+            /* Vibrant green/teal accent */
+            --accent-color: #38a169; 
+            /* Subtle border lines */
+            --border-color: #30363d; 
+            /* Deep black for code blocks */
+            --code-bg: #010409; 
+            /* Button color */
+            --button-bg: #216e39; 
+            --button-hover: #238636;
         }
 
+        /* --- Global Reset and Typography --- */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
+            line-height: 1.6;
         }
 
-        header {
-            background-color: var(--card-bg);
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom: 2px solid var(--accent-color);
-        }
-
-        h1 {
+        h1, h2, h3 {
             color: white;
-            font-size: 2.8em;
-            margin-bottom: 5px;
+            line-height: 1.2;
         }
         
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        a:hover {
+            color: var(--button-hover);
         }
 
-        /* Script Card Styling */
+        /* --- 1. Navbar (Sticky Header) --- */
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        /* --- 2. Main Layout (Two-Column Grid) --- */
+        .main-layout {
+            display: grid;
+            /* Sidebar width (250px) and main content (flexible) */
+            grid-template-columns: 280px 1fr; 
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        /* --- 3. Sidebar (Table of Contents) --- */
+        .sidebar {
+            padding: 30px 20px 30px 30px;
+            border-right: 1px solid var(--border-color);
+            position: sticky; /* Sticky for documentation feel */
+            top: 66px; /* Below the navbar */
+            height: calc(100vh - 66px);
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            margin-top: 0;
+            padding-bottom: 10px;
+            font-size: 1.2em;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 5px 0;
+            color: var(--text-color);
+        }
+        
+        .sidebar a:hover {
+            color: var(--accent-color);
+            transform: translateX(3px);
+        }
+
+        /* --- 4. Content Area (Script Cards) --- */
+        .content-area {
+            padding: 30px 40px;
+        }
+
+        /* --- 5. Script Card Styling --- */
         .script-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            /* Ensures the card doesn't exceed container width */
-            overflow: hidden; 
-        }
-
-        .script-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .script-card h2 {
+            font-size: 1.8em;
             color: var(--accent-color);
-            border-bottom: 1px solid var(--border-color);
             padding-bottom: 10px;
             margin-top: 0;
-            font-size: 1.5em;
+            border-bottom: 2px solid var(--border-color);
         }
         
-        /* Code Block Styling (FIXED: Added max-width and overflow-x) */
+        /* Code Block Styling */
         .code-preview {
             background-color: var(--code-bg);
             padding: 15px;
             border-radius: 6px;
             margin-top: 15px;
             max-height: 200px; 
-            overflow-y: auto;
-            /* Allows horizontal scrolling inside the block if needed */
-            overflow-x: auto; 
+            overflow: auto; /* Handles both vertical and horizontal scroll */
             border: 1px solid var(--border-color);
         }
         
         .code-preview code, .full-code code {
             font-family: 'Consolas', 'Monaco', monospace;
-            line-height: 1.4;
+            line-height: 1.5;
             display: block;
-            /* Ensures lines wrap instead of overflowing the container and border */
             white-space: pre-wrap; 
             word-wrap: break-word; 
         }
 
-        /* Re-enable 'pre' behavior only for the full-code view if lines are very long,
-           but ensure the 'full-code' div has overflow-x: auto */
         .full-code code {
-             white-space: pre; /* Allows long lines to exist */
+            white-space: pre; 
         }
         .full-code {
-             overflow-x: auto; /* Adds horizontal scrollbar for long lines */
+             overflow-x: auto; 
         }
         
-        /* Button Styling */
+        /* Button Styling (Modern Flat Look) */
         .actions {
             margin-top: 15px;
             display: flex;
@@ -113,14 +179,17 @@
             background-color: var(--button-bg);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.2s;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.1s;
         }
         
         .btn:hover {
             background-color: var(--button-hover);
+        }
+        .btn:active {
+            transform: scale(0.98);
         }
 
         /* Hidden Full Code Section */
@@ -132,42 +201,90 @@
             border-radius: 6px;
             border: 1px solid var(--accent-color);
         }
+        
+        /* --- 6. Mobile Responsiveness --- */
+        @media (max-width: 900px) {
+            .main-layout {
+                /* Stacks the layout on mobile */
+                grid-template-columns: 1fr; 
+            }
+
+            .sidebar {
+                position: static; /* No longer sticky */
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 20px;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+            
+            .navbar {
+                padding: 10px 20px;
+            }
+            
+            .sidebar h2 {
+                text-align: center;
+            }
+            
+            .sidebar ul {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 5px 15px;
+            }
+
+            .sidebar li {
+                margin-bottom: 0;
+            }
+
+            .sidebar a {
+                padding: 5px 10px;
+                border-radius: 4px;
+                background-color: rgba(56, 161, 105, 0.1);
+            }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>💎 Professional Lua Script Library</h1>
-        <p>A curated collection of server and game scripts.</p>
-    </header>
-
-    <div class="container">
-        <div class="script-card" id="toc">
-            <h2>📜 Script Index</h2>
-            <div style="column-count: 2; column-gap: 30px;">
-                <ul>
-                    <li><a href="#lockconverter" style="color: var(--accent-color); text-decoration: none;">💰 Lock Converter.lua</a></li>
-                    <li><a href="#opc" style="color: var(--accent-color); text-decoration: none;">⏳ Online Point Currency.lua</a></li>
-                    <li><a href="#dynamicgacha" style="color: var(--accent-color); text-decoration: none;">🎰 Dynamic Gacha.lua</a></li>
-                    <li><a href="#gacha" style="color: var(--accent-color); text-decoration: none;">⛏️ Gacha.lua (Block Break Drop)</a></li>
-                    <li><a href="#featureworld" style="color: var(--accent-color); text-decoration: none;">🌟 FeatureWorld.lua</a></li>
-                </ul>
-                <ul>
-                    <li><a href="#quickdrop" style="color: var(--accent-color); text-decoration: none;">📦 QuickDrop.lua</a></li>
-                    <li><a href="#givetoken" style="color: var(--accent-color); text-decoration: none;">🪙 GiveServerToken.lua</a></li>
-                    <li><a href="#fishexchange" style="color: var(--accent-color); text-decoration: none;">🎣 Fish Exchange.lua</a></li>
-                    <li><a href="#sigilofktesh" style="color: var(--accent-color); text-decoration: none;">🔮 SigilOfKtesh.lua</a></li>
-                    <li><a href="#bonusdrop" style="color: var(--accent-color); text-decoration: none;">✨ BonusDrop.lua</a></li>
-                </ul>
-            </div>
-        </div>
+    <nav class="navbar">
+        <h1>💎 Lua Script Library</h1>
+    </nav>
+    
+    <div class="main-layout">
         
-        <div class="script-card" id="lockconverter">
-            <h2>💰 Lock Converter.lua</h2>
-            <p>Allows players to convert locks (WL, DL, BGL, etc.) through an interactive in-game dialog.</p>
+        <aside class="sidebar" id="toc">
+            <h2>📜 Script Index</h2>
+            <ul>
+                <li><a href="#lockconverter">💰 Lock Converter.lua</a></li>
+                <li><a href="#opc">⏳ Online Point Currency.lua</a></li>
+                <li><a href="#dynamicgacha">🎰 Dynamic Gacha.lua</a></li>
+                <li><a href="#gacha">⛏️ Gacha.lua (Block Break Drop)</a></li>
+                <li><a href="#featureworld">🌟 FeatureWorld.lua</a></li>
+                <li><a href="#quickdrop">📦 QuickDrop.lua</a></li>
+                <li><a href="#givetoken">🪙 GiveServerToken.lua</a></li>
+                <li><a href="#fishexchange">🎣 Fish Exchange.lua</a></li>
+                <li><a href="#sigilofktesh">🔮 SigilOfKtesh.lua</a></li>
+                <li><a href="#bonusdrop">✨ BonusDrop.lua</a></li>
+            </ul>
+        </aside>
+
+        <main class="content-area">
             
-            <div class="code-preview">
-                <code>
+            <div class="script-card" style="margin-bottom: 40px; border: 1px solid var(--accent-color);">
+                <h1>Welcome to the Professional Script Documentation.</h1>
+                <p style="font-size: 1.1em; color: var(--text-color);">This library contains optimized and well-commented Lua scripts for your server. Use the index on the left to navigate, or scroll down to browse all scripts.</p>
+            </div>
+            
+            <div class="script-card" id="lockconverter">
+                <h2>💰 Lock Converter.lua</h2>
+                <p>Allows players to convert locks (WL, DL, BGL, etc.) through an interactive in-game dialog.</p>
+                
+                <div class="code-preview">
+                    <code>
 print("(Loaded) Lock Converter Script for GrowSoft")
 
 local WORLD_LOCK_ID = 242
@@ -180,16 +297,16 @@ local GOLDEN_GEM_LOCK = 25006
 -- Change this if your max inventory is not 200 (like 250 or 100).
 local MAX_INVENTORY = 200
 ...
-                </code>
-            </div>
+                    </code>
+                </div>
 
-            <div class="actions">
-                <button class="btn" onclick="toggleCode('lockconverter-code')">View Full Code</button>
-                <button class="btn" onclick="copyCode('lockconverter-full-code')">Copy Code</button>
-            </div>
+                <div class="actions">
+                    <button class="btn" onclick="toggleCode('lockconverter-code')">View Full Code</button>
+                    <button class="btn" onclick="copyCode('lockconverter-full-code')">Copy Code</button>
+                </div>
 
-            <div class="full-code" id="lockconverter-code">
-                <code id="lockconverter-full-code">
+                <div class="full-code" id="lockconverter-code">
+                    <code id="lockconverter-full-code">
 print("(Loaded) Lock Converter Script for GrowSoft")
 
 local WORLD_LOCK_ID = 242
@@ -264,7 +381,7 @@ local function checkAndConvert(player, fromID, toID, ratio, funcName)
     local fromRemove = convertCount * ratio
     local toAdd = convertCount
 
-    local freeSpace = MAX_INVENTORY - player:getInventoryCount()
+    local freeSpace = 200 - player:getInventoryCount()
     if toAdd > freeSpace then
         player:onConsoleMessage("`4Not enough inventory space to add " .. toAdd .. " " .. toName .. ".")
         player:playAudio("bleep_fail.wav")
@@ -362,16 +479,16 @@ onPlayerCommandCallback(function(world, player, fullCommand)
 
     return false
 end)
-                </code>
+                    </code>
+                </div>
             </div>
-        </div>
 
-        <div class="script-card" id="opc">
-            <h2>⏳ Online Point Currency.lua</h2>
-            <p>A server currency system earned based on player online time, featuring a market and leaderboard.</p>
-            
-            <div class="code-preview">
-                <code>
+            <div class="script-card" id="opc">
+                <h2>⏳ Online Point Currency.lua</h2>
+                <p>A server currency system earned based on player online time, featuring a market and leaderboard.</p>
+                
+                <div class="code-preview">
+                    <code>
 print("(Loaded) OPC Script for GrowSoft")
 
 -- Storage (if you want to reset data, simply change the value of KEY_STRING)
@@ -384,16 +501,16 @@ local playerTimers = {}
 -- Market Name and Currency Name (Editable)
 local marketName = "Online Point Market"
 ...
-                </code>
-            </div>
+                    </code>
+                </div>
 
-            <div class="actions">
-                <button class="btn" onclick="toggleCode('opc-code')">View Full Code</button>
-                <button class="btn" onclick="copyCode('opc-full-code')">Copy Code</button>
-            </div>
+                <div class="actions">
+                    <button class="btn" onclick="toggleCode('opc-code')">View Full Code</button>
+                    <button class="btn" onclick="copyCode('opc-full-code')">Copy Code</button>
+                </div>
 
-            <div class="full-code" id="opc-code">
-                <code id="opc-full-code">
+                <div class="full-code" id="opc-code">
+                    <code id="opc-full-code">
 print("(Loaded) OPC Script for GrowSoft")
 
 -- Storage (if you want to reset data, simply change the value of KEY_STRING)
@@ -700,16 +817,16 @@ loadDatasToServer()
 for _, player in ipairs(getServerPlayers()) do
     startPlayerTimer(player)
 end
-                </code>
+                    </code>
+                </div>
             </div>
-        </div>
 
-        <div class="script-card" id="dynamicgacha">
-            <h2>🎰 Dynamic Gacha.lua</h2>
-            <p>A dynamic Gacha/Drop system allowing easy modification of drop sets and chances for different events.</p>
-            
-            <div class="code-preview">
-                <code>
+            <div class="script-card" id="dynamicgacha">
+                <h2>🎰 Dynamic Gacha.lua</h2>
+                <p>A dynamic Gacha/Drop system allowing easy modification of drop sets and chances for different events.</p>
+                
+                <div class="code-preview">
+                    <code>
 print("(Loaded) Dynamic Gacha System Script for GrowSoft")
 
 -- 0.01 = 1%, 0.50 = 50%, and 1 = 100%
@@ -731,16 +848,16 @@ local dropSets = {
         {itemID = 8588, chance = 0.10},
     },
     ...
-                </code>
-            </div>
+                    </code>
+                </div>
 
-            <div class="actions">
-                <button class="btn" onclick="toggleCode('dynamicgacha-code')">View Full Code</button>
-                <button class="btn" onclick="copyCode('dynamicgacha-full-code')">Copy Code</button>
-            </div>
+                <div class="actions">
+                    <button class="btn" onclick="toggleCode('dynamicgacha-code')">View Full Code</button>
+                    <button class="btn" onclick="copyCode('dynamicgacha-full-code')">Copy Code</button>
+                </div>
 
-            <div class="full-code" id="dynamicgacha-code">
-                <code id="dynamicgacha-full-code">
+                <div class="full-code" id="dynamicgacha-code">
+                    <code id="dynamicgacha-full-code">
 print("(Loaded) Dynamic Gacha System Script for GrowSoft")
 
 -- 0.01 = 1%, 0.50 = 50%, and 1 = 100%
@@ -832,16 +949,16 @@ onTileBreakCallback(function(world, player, tile)
     end
     return false -- Let other scripts or game handle the break
 end)
-                </code>
+                    </code>
+                </div>
             </div>
-        </div>
 
-        <div class="script-card" id="gacha">
-            <h2>⛏️ Gacha.lua (Block Break Drop)</h2>
-            <p>A Gacha system that determines drops based on the type of block broken (e.g., Dirt, Rock).</p>
-            
-            <div class="code-preview">
-                <code>
+            <div class="script-card" id="gacha">
+                <h2>⛏️ Gacha.lua (Block Break Drop)</h2>
+                <p>A Gacha system that determines drops based on the type of block broken (e.g., Dirt, Rock).</p>
+                
+                <div class="code-preview">
+                    <code>
 print("(Loaded) Gacha Script for GrowSoft")
 
 -- ID inside [] is the target block. Fill name with the exact name of the target block, it will help you identify blocks.
@@ -860,16 +977,16 @@ local dropSets = {
         }
     },
     ...
-                </code>
-            </div>
+                    </code>
+                </div>
 
-            <div class="actions">
-                <button class="btn" onclick="toggleCode('gacha-code')">View Full Code</button>
-                <button class="btn" onclick="copyCode('gacha-full-code')">Copy Code</button>
-            </div>
+                <div class="actions">
+                    <button class="btn" onclick="toggleCode('gacha-code')">View Full Code</button>
+                    <button class="btn" onclick="copyCode('gacha-full-code')">Copy Code</button>
+                </div>
 
-            <div class="full-code" id="gacha-code">
-                <code id="gacha-full-code">
+                <div class="full-code" id="gacha-code">
+                    <code id="gacha-full-code">
 print("(Loaded) Gacha Script for GrowSoft")
 
 -- ID inside [] is the target block. Fill name with the exact name of the target block, it will help you identify blocks.
@@ -943,16 +1060,16 @@ onTileBreakCallback(function(world, player, tile)
     end
     return false
 end)
-                </code>
+                    </code>
+                </div>
             </div>
-        </div>
 
-        <div class="script-card" id="featureworld">
-            <h2>🌟 FeatureWorld.lua</h2>
-            <p>Admin tool to dynamically add or remove featured worlds from the World Menu with custom colors.</p>
-            
-            <div class="code-preview">
-                <code>
+            <div class="script-card" id="featureworld">
+                <h2>🌟 FeatureWorld.lua</h2>
+                <p>Admin tool to dynamically add or remove featured worlds from the World Menu with custom colors.</p>
+                
+                <div class="code-preview">
+                    <code>
 print("(Loaded) Feature World Script for GrowSoft")
 
 -- Available Colors (usage: color = colorMap.<color>)
@@ -973,16 +1090,16 @@ local colorMap = {
     transparent = 4278190080,
 }
 ...
-                </code>
-            </div>
+                    </code>
+                </div>
 
-            <div class="actions">
-                <button class="btn" onclick="toggleCode('featureworld-code')">View Full Code</button>
-                <button class="btn" onclick="copyCode('featureworld-full-code')">Copy Code</button>
-            </div>
+                <div class="actions">
+                    <button class="btn" onclick="toggleCode('featureworld-code')">View Full Code</button>
+                    <button class="btn" onclick="copyCode('featureworld-full-code')">Copy Code</button>
+                </div>
 
-            <div class="full-code" id="featureworld-code">
-                <code id="featureworld-full-code">
+                <div class="full-code" id="featureworld-code">
+                    <code id="featureworld-full-code">
 print("(Loaded) Feature World Script for GrowSoft")
 
 -- Available Colors (usage: color = colorMap.<color>)
@@ -1138,16 +1255,16 @@ onPlayerCommandCallback(function(_, player, fullCommand)
     
     return true
 end)
-                </code>
+                    </code>
+                </div>
             </div>
-        </div>
 
-        <div class="script-card" id="quickdrop">
-            <h2>📦 QuickDrop.lua</h2>
-            <p>Admin command (`/drops`) to instantly drop large quantities of predefined items in a set (for events or giveaways).</p>
-            
-            <div class="code-preview">
-                <code>
+            <div class="script-card" id="quickdrop">
+                <h2>📦 QuickDrop.lua</h2>
+                <p>Admin command (`/drops`) to instantly drop large quantities of predefined items in a set (for events or giveaways).</p>
+                
+                <div class="code-preview">
+                    <code>
 print("(Loaded) Quick Drop Script for GrowSoft")
 
 -- /drops <setNumber>
@@ -1167,16 +1284,16 @@ local Roles = {
 
 local dropCommand = {
 ...
-                </code>
-            </div>
+                    </code>
+                </div>
 
-            <div class="actions">
-                <button class="btn" onclick="toggleCode('quickdrop-code')">View Full Code</button>
-                <button class="btn" onclick="copyCode('quickdrop-full-code')">Copy Code</button>
-            </div>
+                <div class="actions">
+                    <button class="btn" onclick="toggleCode('quickdrop-code')">View Full Code</button>
+                    <button class="btn" onclick="copyCode('quickdrop-full-code')">Copy Code</button>
+                </div>
 
-            <div class="full-code" id="quickdrop-code">
-                <code id="quickdrop-full-code">
+                <div class="full-code" id="quickdrop-code">
+                    <code id="quickdrop-full-code">
 print("(Loaded) Quick Drop Script for GrowSoft")
 
 -- /drops <setNumber>
@@ -1243,16 +1360,16 @@ onPlayerCommandCallback(function(world, player, fullCommand)
 
     return false
 end)
-                </code>
+                    </code>
+                </div>
             </div>
-        </div>
 
-        <div class="script-card" id="givetoken">
-            <h2>🪙 GiveServerToken.lua</h2>
-            <p>Admin commands (`/givetoken` and `/removetoken`) for managing server-side currency/tokens for players.</p>
-            
-            <div class="code-preview">
-                <code>
+            <div class="script-card" id="givetoken">
+                <h2>🪙 GiveServerToken.lua</h2>
+                <p>Admin commands (`/givetoken` and `/removetoken`) for managing server-side currency/tokens for players.</p>
+                
+                <div class="code-preview">
+                    <code>
 print("(Loaded) Give / Remove Server Token Script for GrowSoft")
 
 local serverTokenID = 20234
@@ -1269,16 +1386,16 @@ registerLuaCommand({
     description = "Give server token to a player."
 })
 ...
-                </code>
-            </div>
+                    </code>
+                </div>
 
-            <div class="actions">
-                <button class="btn" onclick="toggleCode('givetoken-code')">View Full Code</button>
-                <button class="btn" onclick="copyCode('givetoken-full-code')">Copy Code</button>
-            </div>
+                <div class="actions">
+                    <button class="btn" onclick="toggleCode('givetoken-code')">View Full Code</button>
+                    <button class="btn" onclick="copyCode('givetoken-full-code')">Copy Code</button>
+                </div>
 
-            <div class="full-code" id="givetoken-code">
-                <code id="givetoken-full-code">
+                <div class="full-code" id="givetoken-code">
+                    <code id="givetoken-full-code">
 print("(Loaded) Give / Remove Server Token Script for GrowSoft")
 
 local serverTokenID = 20234
@@ -1359,16 +1476,16 @@ onPlayerCommandCallback(function(world, player, fullCommand)
 
     return true
 end)
-                </code>
+                    </code>
+                </div>
             </div>
-        </div>
 
-        <div class="script-card" id="fishexchange">
-            <h2>🎣 Fish Exchange.lua</h2>
-            <p>Allows players to sell their inventory of fish for a specified server currency (e.g., World Locks) via dialog.</p>
-            
-            <div class="code-preview">
-                <code>
+            <div class="script-card" id="fishexchange">
+                <h2>🎣 Fish Exchange.lua</h2>
+                <p>Allows players to sell their inventory of fish for a specified server currency (e.g., World Locks) via dialog.</p>
+                
+                <div class="code-preview">
+                    <code>
 print("(Loaded) Fish Exchange Script for GrowSoft")
 
 local Roles = {
@@ -1384,16 +1501,16 @@ local FISH_WORLD = "FISHING"
 -- Tier 3 = 101 to 250 lbs
 -- They act as Multiplier (PRIZE_AMOUNT_PER_FISH * Tier)
 ...
-                </code>
-            </div>
+                    </code>
+                </div>
 
-            <div class="actions">
-                <button class="btn" onclick="toggleCode('fishexchange-code')">View Full Code</button>
-                <button class="btn" onclick="copyCode('fishexchange-full-code')">Copy Code</button>
-            </div>
+                <div class="actions">
+                    <button class="btn" onclick="toggleCode('fishexchange-code')">View Full Code</button>
+                    <button class="btn" onclick="copyCode('fishexchange-full-code')">Copy Code</button>
+                </div>
 
-            <div class="full-code" id="fishexchange-code">
-                <code id="fishexchange-full-code">
+                <div class="full-code" id="fishexchange-code">
+                    <code id="fishexchange-full-code">
 print("(Loaded) Fish Exchange Script for GrowSoft")
 
 local Roles = {
@@ -1644,16 +1761,16 @@ onPlayerCommandCallback(function(world, player, fullCommand)
 
     return false
 end)
-                </code>
+                    </code>
+                </div>
             </div>
-        </div>
         
-        <div class="script-card" id="sigilofktesh">
-            <h2>🔮 SigilOfKtesh.lua</h2>
-            <p>Handles the use of a special item (Sigil of K'tesh), warping the player only during the Halloween event and in the correct world.</p>
-            
-            <div class="code-preview">
-                <code>
+            <div class="script-card" id="sigilofktesh">
+                <h2>🔮 SigilOfKtesh.lua</h2>
+                <p>Handles the use of a special item (Sigil of K'tesh), warping the player only during the Halloween event and in the correct world.</p>
+                
+                <div class="code-preview">
+                    <code>
 print("(Loaded) Sigil Of K'tesh Script for GrowSoft")
 
 onPlayerConsumableCallback(function(world, player, tile, clickedPlayer, itemID)
@@ -1669,16 +1786,16 @@ onPlayerConsumableCallback(function(world, player, tile, clickedPlayer, itemID)
         return true
     end
 ...
-                </code>
-            </div>
+                    </code>
+                </div>
 
-            <div class="actions">
-                <button class="btn" onclick="toggleCode('sigilofktesh-code')">View Full Code</button>
-                <button class="btn" onclick="copyCode('sigilofktesh-full-code')">Copy Code</button>
-            </div>
+                <div class="actions">
+                    <button class="btn" onclick="toggleCode('sigilofktesh-code')">View Full Code</button>
+                    <button class="btn" onclick="copyCode('sigilofktesh-full-code')">Copy Code</button>
+                </div>
 
-            <div class="full-code" id="sigilofktesh-code">
-                <code id="sigilofktesh-full-code">
+                <div class="full-code" id="sigilofktesh-code">
+                    <code id="sigilofktesh-full-code">
 print("(Loaded) Sigil Of K'tesh Script for GrowSoft")
 
 onPlayerConsumableCallback(function(world, player, tile, clickedPlayer, itemID)
@@ -1707,16 +1824,16 @@ onPlayerConsumableCallback(function(world, player, tile, clickedPlayer, itemID)
 
     return true
 end)
-                </code>
+                    </code>
+                </div>
             </div>
-        </div>
         
-        <div class="script-card" id="bonusdrop">
-            <h2>✨ BonusDrop.lua</h2>
-            <p>A simple system to add extra (bonus) drops with a set chance when a specific block is broken.</p>
-            
-            <div class="code-preview">
-                <code>
+            <div class="script-card" id="bonusdrop">
+                <h2>✨ BonusDrop.lua</h2>
+                <p>A simple system to add extra (bonus) drops with a set chance when a specific block is broken.</p>
+                
+                <div class="code-preview">
+                    <code>
 print("(Loaded) Bonus Drop Script for GrowSoft")
 
 math.randomseed(os.time())
@@ -1731,16 +1848,16 @@ local drops = {
 
 local function shouldDrop(chancePercent)
 ...
-                </code>
-            </div>
+                    </code>
+                </div>
 
-            <div class="actions">
-                <button class="btn" onclick="toggleCode('bonusdrop-code')">View Full Code</button>
-                <button class="btn" onclick="copyCode('bonusdrop-full-code')">Copy Code</button>
-            </div>
+                <div class="actions">
+                    <button class="btn" onclick="toggleCode('bonusdrop-code')">View Full Code</button>
+                    <button class="btn" onclick="copyCode('bonusdrop-full-code')">Copy Code</button>
+                </div>
 
-            <div class="full-code" id="bonusdrop-code">
-                <code id="bonusdrop-full-code">
+                <div class="full-code" id="bonusdrop-code">
+                    <code id="bonusdrop-full-code">
 print("(Loaded) Bonus Drop Script for GrowSoft")
 
 math.randomseed(os.time())
@@ -1785,11 +1902,11 @@ onTileBreakCallback(function(world, player, tile)
 
     return false
 end)
-                </code>
+                    </code>
+                </div>
             </div>
-        </div>
-
-
+            
+        </main>
     </div>
     
     <script>
@@ -1806,21 +1923,19 @@ end)
             const codeElement = document.getElementById(id);
             const textToCopy = codeElement.innerText;
             
-            // Use the modern clipboard API
             navigator.clipboard.writeText(textToCopy).then(() => {
-                alert('Code successfully copied to clipboard!');
+                alert('Kode berhasil disalin!');
             }).catch(err => {
-                console.error('Failed to copy:', err);
-                // Fallback for older browsers
+                console.error('Gagal menyalin:', err);
                 const tempTextarea = document.createElement('textarea');
                 tempTextarea.value = textToCopy;
                 document.body.appendChild(tempTextarea);
                 tempTextarea.select();
                 try {
                     document.execCommand('copy');
-                    alert('Code successfully copied to clipboard!');
+                    alert('Kode berhasil disalin!');
                 } catch (e) {
-                    alert('Failed to copy code. Please copy manually.');
+                    alert('Gagal menyalin kode. Silakan salin secara manual.');
                 }
                 document.body.removeChild(tempTextarea);
             });
