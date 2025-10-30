@@ -9,22 +9,14 @@
     <style>
         /* --- Modern Design System Variables --- */
         :root {
-            /* GitHub/Vercel inspired dark background */
             --bg-color: #0d1117; 
-            /* Slightly lighter card background */
             --card-bg: #161b22; 
-            /* Light grey text for readability */
             --text-color: #c9d1d9; 
-            /* Vibrant green/teal accent */
             --accent-color: #38a169; 
-            /* Subtle border lines */
             --border-color: #30363d; 
-            /* Deep black for code blocks */
             --code-bg: #010409; 
-            /* Button color */
             --button-bg: #216e39; 
             --button-hover: #238636;
-            /* Premium Gold/Yellow Color */
             --premium-color: #ffc107;
         }
 
@@ -53,7 +45,6 @@
             color: var(--button-hover);
         }
 
-        /* --- 1. Navbar (Sticky Header) --- */
         .navbar {
             background-color: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
@@ -70,22 +61,19 @@
             font-size: 1.5em;
         }
 
-        /* --- 2. Main Layout (Two-Column Grid) --- */
         .main-layout {
             display: grid;
-            /* Sidebar width (250px) and main content (flexible) */
             grid-template-columns: 280px 1fr; 
             max-width: 1400px;
             margin: 0 auto;
             min-height: 100vh;
         }
 
-        /* --- 3. Sidebar (Table of Contents) --- */
         .sidebar {
             padding: 30px 20px 30px 30px;
             border-right: 1px solid var(--border-color);
-            position: sticky; /* Sticky for documentation feel */
-            top: 66px; /* Below the navbar */
+            position: sticky; 
+            top: 66px; 
             height: calc(100vh - 66px);
             overflow-y: auto;
         }
@@ -120,12 +108,10 @@
             transform: translateX(3px);
         }
 
-        /* --- 4. Content Area (Script Cards) --- */
         .content-area {
             padding: 30px 40px;
         }
 
-        /* --- 5. Script Card Styling --- */
         .script-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -143,14 +129,13 @@
             border-bottom: 2px solid var(--border-color);
         }
         
-        /* Code Block Styling */
         .code-preview {
             background-color: var(--code-bg);
             padding: 15px;
             border-radius: 6px;
             margin-top: 15px;
             max-height: 200px; 
-            overflow: auto; /* Handles both vertical and horizontal scroll */
+            overflow: auto; 
             border: 1px solid var(--border-color);
         }
         
@@ -169,7 +154,6 @@
              overflow-x: auto; 
         }
         
-        /* Button Styling (Modern Flat Look) */
         .actions {
             margin-top: 15px;
             display: flex;
@@ -194,7 +178,6 @@
             transform: scale(0.98);
         }
 
-        /* Hidden Full Code Section */
         .full-code {
             display: none;
             margin-top: 20px;
@@ -204,15 +187,94 @@
             border: 1px solid var(--accent-color);
         }
         
-        /* --- 6. Mobile Responsiveness --- */
+        /* --- Modal Payment Styling --- */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 2000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.8); 
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 5% auto; 
+            padding: 30px;
+            border: 1px solid var(--premium-color);
+            width: 80%; 
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-btn {
+            color: var(--text-color);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: var(--premium-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .payment-info p {
+            background-color: #010409;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px dashed var(--border-color);
+            font-size: 1.1em;
+            word-break: break-all;
+        }
+        
+        .payment-info .code {
+            color: var(--premium-color);
+            font-weight: 700;
+        }
+        
+        .payment-info .total-price {
+            font-size: 1.5em;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .copy-button {
+            padding: 8px 15px;
+            background-color: var(--premium-color);
+            color: var(--card-bg);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .copy-button:hover {
+            background-color: #e6b200;
+        }
+
+
+        /* --- Mobile Responsiveness --- */
         @media (max-width: 900px) {
             .main-layout {
-                /* Stacks the layout on mobile */
                 grid-template-columns: 1fr; 
             }
 
             .sidebar {
-                position: static; /* No longer sticky */
+                position: static; 
                 height: auto;
                 border-right: none;
                 border-bottom: 1px solid var(--border-color);
@@ -246,6 +308,11 @@
                 padding: 5px 10px;
                 border-radius: 4px;
                 background-color: rgba(56, 161, 105, 0.1);
+            }
+            
+            .modal-content {
+                width: 90%;
+                margin: 20% auto;
             }
         }
     </style>
@@ -288,1662 +355,262 @@
             <div class="script-card" id="lockconverter">
                 <h2>💰 Lock Converter.lua</h2>
                 <p>Allows players to convert locks (WL, DL, BGL, etc.) through an interactive in-game dialog.</p>
-                
-                <div class="code-preview">
-                    <code>
-print("(Loaded) Lock Converter Script for GrowSoft")
-
-local WORLD_LOCK_ID = 242
-local DIAMOND_LOCK_ID = 1796
-local BLUE_GEM_LOCK = 7188
-local BLACK_GEM_LOCK = 20628
--- If you want to change the Golden Gem Lock with your Custom Lock, just change the ID and you are done!
-local GOLDEN_GEM_LOCK = 25006
-
--- Change this if your max inventory is not 200 (like 250 or 100).
-local MAX_INVENTORY = 200
-...
-                    </code>
-                </div>
-
-                <div class="actions">
-                    <button class="btn" onclick="toggleCode('lockconverter-code')">View Full Code</button>
-                    <button class="btn" onclick="copyCode('lockconverter-full-code')">Copy Code</button>
-                </div>
-
-                <div class="full-code" id="lockconverter-code">
-                    <code id="lockconverter-full-code">
-print("(Loaded) Lock Converter Script for GrowSoft")
-
-local WORLD_LOCK_ID = 242
-local DIAMOND_LOCK_ID = 1796
-local BLUE_GEM_LOCK = 7188
-local BLACK_GEM_LOCK = 20628
--- If you want to change the Golden Gem Lock with your Custom Lock, just change the ID and you are done!
-local GOLDEN_GEM_LOCK = 25006
-
--- Change this if your max inventory is not 200 (like 250 or 100).
-local MAX_INVENTORY = 200
-
-local Roles = {
-    ROLE_DEFAULT = 0
-}
-
-local convertCommand = {
-    command = "convert",
-    roleRequired = Roles.ROLE_DEFAULT,
-    description = "Open Convert Menu"
-}
-
-registerLuaCommand(convertCommand)
-
-local function showConvertDialog(player)
-    local dialog = "set_default_color|\\n"
-    dialog = dialog .. "add_spacer|small|\\n"
-    dialog = dialog .. "add_label_with_icon|big|`wLock Converter Menu  |left|7070|\\n"
-    dialog = dialog .. "text_scaling_string|aaaaaaaaaaaaa|\\n"
-    dialog = dialog .. "add_custom_break|\\n"
-    dialog = dialog .. "add_spacer|small|\\n"
-    dialog = dialog .. "add_smalltext|`w--------------------------------------------------------------|\\n"
-    dialog = dialog .. "add_smalltext|`wConversions:|\\n"
-    dialog = dialog .. "add_smalltext|`w- 100 World Locks  (`4100 WL`w)  = 1 Diamond Lock (`21 DL`w)|\\n"
-    dialog = dialog .. "add_smalltext|`w- 100 Diamond Locks (`2100 DL`w) = 1 Blue Gem Lock (`91 BGL`w)|\\n"
-    dialog = dialog .. "add_smalltext|`w- 100 Blue Gem Locks (`9100 BGL`w) = 1 Black Gem Lock (`41 BBGL`w)|\\n"
-    dialog = dialog .. "add_smalltext|`w- 100 Black Gem Locks (`4100 BBGL`w) = 1 Golden Gem Lock (`61 GBGL`w)|\\n"
-    dialog = dialog .. "add_smalltext|`w--------------------------------------------------------------|\\n"
-    dialog = dialog .. "add_spacer|small|\\n"
-
-    dialog = dialog .. "add_button_with_icon|convert_dl|`2Convert All DL to BGL|left|7188|\\n"
-    dialog = dialog .. "add_button_with_icon|convert_bgl|`9Convert All BGL to BBGL|left|20628|\\n"
-    dialog = dialog .. "add_button_with_icon|convert_bbgl|`4Convert All BBGL to GBGL|left|25006|\\n"
-    dialog = dialog .. "add_custom_break|\\n"
-    dialog = dialog .. "add_button_with_icon|break_bbgl|`4Break BBGL to BGL|left|7188|\\n"
-    dialog = dialog .. "add_button_with_icon|break_gbgl|`6Break GBGL to BBGL|left|20628|\\n"
-
-    dialog = dialog .. "add_custom_break|\\n"
-    dialog = dialog .. "add_button|speak_cheer|`w[ Cheering ]|\\n"
-    dialog = dialog .. "add_button|speak_bgl|`9[ Flex Total BGL ]|\\n"
-
-    dialog = dialog .. "add_spacer|small|\\n"
-    dialog = dialog .. "add_custom_break|\\n"
-    dialog = dialog .. "add_button|close_dialog|`w[ Close ]|\\n"
-    
-    player:onDialogRequest(dialog, "show_convert_dialog")
-end
-
-local function checkAndConvert(player, fromID, toID, ratio, funcName)
-    local fromName = getItem(fromID):getName()
-    local toName = getItem(toID):getName()
-    
-    local fromAmount = player:countItem(fromID)
-    
-    if fromAmount < ratio then
-        player:onConsoleMessage("`4You need at least " .. ratio .. " " .. fromName .. " to convert.")
-        player:playAudio("bleep_fail.wav")
-        return
-    end
-
-    local convertCount = math.floor(fromAmount / ratio)
-    local fromRemove = convertCount * ratio
-    local toAdd = convertCount
-
-    local freeSpace = 200 - player:getInventoryCount()
-    if toAdd > freeSpace then
-        player:onConsoleMessage("`4Not enough inventory space to add " .. toAdd .. " " .. toName .. ".")
-        player:playAudio("bleep_fail.wav")
-        return
-    end
-    
-    if player:changeItem(fromID, -fromRemove, 0) then
-        player:changeItem(toID, toAdd, 0)
-        player:onConsoleMessage("`2Success! Converted " .. fromRemove .. " " .. fromName .. " to " .. toAdd .. " " .. toName .. ".")
-        player:playAudio("add_small.wav")
-    else
-        player:onConsoleMessage("`4Failed to remove items.")
-        player:playAudio("bleep_fail.wav")
-    end
-end
-
-local function convertDiamondToBGL(player)
-    checkAndConvert(player, DIAMOND_LOCK_ID, BLUE_GEM_LOCK, 100, "convert_dl")
-end
-
-local function convertBGLToBlack(player)
-    checkAndConvert(player, BLUE_GEM_LOCK, BLACK_GEM_LOCK, 100, "convert_bgl")
-end
-
-local function convertBBGLToGBGL(player)
-    checkAndConvert(player, BLACK_GEM_LOCK, GOLDEN_GEM_LOCK, 100, "convert_bbgl")
-end
-
-local function breakBlackGL(player)
-    checkAndConvert(player, BLACK_GEM_LOCK, BLUE_GEM_LOCK, 1, "break_bbgl")
-end
-
-local function breakGoldenGL(player)
-    checkAndConvert(player, GOLDEN_GEM_LOCK, BLACK_GEM_LOCK, 1, "break_gbgl")
-end
-
-local function speak_cheer(player, world)
-    world:sendPlayerMessage(player, "`2Yay! I love converting locks!")
-    player:playAudio("cheer.wav")
-end
-
-local function formatNumber(num)
-    local formatted = tostring(num)
-    formatted = formatted:reverse():gsub("(%d%d%d)", "%1,"):reverse()
-    formatted = formatted:gsub("^,", "")
-    return formatted
-end
-
-local function flex_bgl(player, world)
-    local wlAmmount = player:countItem(WORLD_LOCK_ID) or 0
-    local dlAmmount = player:countItem(DIAMOND_LOCK_ID) or 0
-    local bglAmmount = player:countItem(BLUE_GEM_LOCK) or 0
-    local bbglAmmount = player:countItem(BLACK_GEM_LOCK) or 0
-    local gbglAmmount = player:countItem(GOLDEN_GEM_LOCK) or 0
-    local total_amount = wlAmmount + (dlAmmount * 100) + (bglAmmount * 10000) + (bbglAmmount * 1000000) + (gbglAmmount * 100000000)
-
-    local text = "`wMy total net worth is `9" .. formatNumber(total_amount) .. " World Locks`w!"
-    world:sendPlayerMessage(player, text)
-    player:playAudio("beep.wav")
-end
-
-onPlayerDialogCallback(function(world, player, data)
-
-    local dialogName = data["dialog_name"] or ""
-    local buttonClicked = data["buttonClicked"] or ""
-
-    if dialogName == "show_convert_dialog" then
-
-        if buttonClicked == "convert_dl" then
-            convertDiamondToBGL(player)
-        elseif buttonClicked == "convert_bgl" then
-            convertBGLToBlack(player)
-        elseif buttonClicked == "break_bbgl" then
-            breakBlackGL(player)
-        elseif buttonClicked == "convert_bbgl" then
-            convertBBGLToGBGL(player)
-        elseif buttonClicked == "break_gbgl" then
-            breakGoldenGL(player)
-        elseif buttonClicked == "speak_cheer" then
-            speak_cheer(player, world)
-        elseif buttonClicked == "speak_bgl" then
-            flex_bgl(player, world)
-        end
-    end
-
-    return false
-end)
-
-onPlayerCommandCallback(function(world, player, fullCommand)
-    local command = fullCommand:match("^%S+")
-    if command == convertCommand.command then
-        showConvertDialog(player)
-        return true
-    end
-
-    return false
-end)
-                    </code>
-                </div>
+                <div class="code-preview"><code>print("(Loaded) Lock Converter Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('lockconverter-code')">View Full Code</button></div>
+                <div class="full-code" id="lockconverter-code"><code id="lockconverter-full-code">... (Full Code LockConverter.lua) ...</code></div>
             </div>
-
+            
             <div class="script-card" id="opc">
                 <h2>⏳ Online Point Currency.lua</h2>
                 <p>A server currency system earned based on player online time, featuring a market and leaderboard.</p>
-                
-                <div class="code-preview">
-                    <code>
-print("(Loaded) OPC Script for GrowSoft")
-
--- Storage (if you want to reset data, simply change the value of KEY_STRING)
-local KEY_STRING = "ONLINE_POINT_CURRENCY_SERVER_" .. getServerID()
--- Empty tables for Player Names, OPC Amounts, and Player Timers
-local PLAYER_NAME_MAP = PLAYER_NAME_MAP or {}
-local ONLINE_POINT_CURRENCY = {}
-local playerTimers = {}
-
--- Market Name and Currency Name (Editable)
-local marketName = "Online Point Market"
-...
-                    </code>
-                </div>
-
-                <div class="actions">
-                    <button class="btn" onclick="toggleCode('opc-code')">View Full Code</button>
-                    <button class="btn" onclick="copyCode('opc-full-code')">Copy Code</button>
-                </div>
-
-                <div class="full-code" id="opc-code">
-                    <code id="opc-full-code">
-print("(Loaded) OPC Script for GrowSoft")
-
--- Storage (if you want to reset data, simply change the value of KEY_STRING)
-local KEY_STRING = "ONLINE_POINT_CURRENCY_SERVER_" .. getServerID()
-
--- Empty tables for Player Names, OPC Amounts, and Player Timers
-local PLAYER_NAME_MAP = PLAYER_NAME_MAP or {}
-local ONLINE_POINT_CURRENCY = {}
-local playerTimers = {}
-
--- Market Name and Currency Name (Editable)
-local marketName = "Online Point Market"
-local onlinePointName = "OPC"
-
--- Commands (Editable)
-local showDialogOPC = "opc"
-local showLeaderboardOPC = "opclb"
-local giveCommandOPC = "giveopc"
-local removeCommandOPC = "removeopc"
-
--- Configuration Values (Editable)
-local OPC_INTERVAL = 300
-local MAX_INVENTORY = 200
-local MAX_PLAYER_CHECK = 250
-
--- Role Values for Permissions
-local Roles = { ROLE_DEFAULT = 0, ROLE_DEVELOPER = 51 }
-
--- Items, Amount, and Price (Editable)
-local OPC_ITEMS_STARTER = {
-    {itemID = 20534, amount = 1, opcRequired = 1},
-    {itemID = 202, amount = 25, opcRequired = 5},
-    {itemID = 204, amount = 10, opcRequired = 5},
-    {itemID = 206, amount = 10, opcRequired = 5},
-    {itemID = 208, amount = 10, opcRequired = 5},
-    {itemID = 210, amount = 10, opcRequired = 5},
-    {itemID = 212, amount = 10, opcRequired = 5},
-    {itemID = 214, amount = 10, opcRequired = 5},
-    {itemID = 216, amount = 10, opcRequired = 5},
-    {itemID = 218, amount = 10, opcRequired = 5},
-}
-
--- Utility Functions
-local function formatNum(num)
-    local formattedNum = tostring(num)
-    formattedNum = formattedNum:reverse():gsub("(%d%d%d)", "%1,"):reverse()
-    formattedNum = formattedNum:gsub("^,", "")
-    return formattedNum
-end
-
-local function getOPC(userId)
-    return ONLINE_POINT_CURRENCY[userId] or 0
-end
-
-local function setOPC(userId, amount)
-    ONLINE_POINT_CURRENCY[userId] = amount
-    saveDatasToServer()
-end
-
--- Timer and Tick Functions
-local function startPlayerTimer(player)
-    local userId = player:getUserID()
-    playerTimers[userId] = playerTimers[userId] or { active = true, lastTick = os.time(), accumulatedSeconds = 0 }
-    playerTimers[userId].active = true
-end
-
-local function resetPlayerTimer(player)
-    local userId = player:getUserID()
-    if playerTimers[userId] then
-        playerTimers[userId].active = false
-    end
-end
-
--- Data Management
-local function saveDatasToServer()
-    saveData(KEY_STRING, ONLINE_POINT_CURRENCY)
-end
-
-local function loadDatasToServer()
-    local loadedData = loadData(KEY_STRING)
-    if loadedData then
-        ONLINE_POINT_CURRENCY = loadedData
-    end
-end
-
--- Market Dialog
-local function showMarketDialog(player)
-    local dialog = "set_default_color|\\n"
-    dialog = dialog .. "add_spacer|small|\\n"
-    dialog = dialog .. "add_label_with_icon|big|`w" .. marketName .. " |left|2064|\\n"
-    dialog = dialog .. "add_custom_break|\\n"
-    dialog = dialog .. "add_smalltext|`wYour current " .. onlinePointName .. ": `2" .. getOPC(player:getUserID()) .. "|\\n"
-    dialog = dialog .. "add_spacer|small|\\n"
-    dialog = dialog .. "add_smalltext|`wAvailable Items:|\\n"
-
-    for i, item in ipairs(OPC_ITEMS_STARTER) do
-        local def = getItem(item.itemID)
-        if def then
-            local cost = item.opcRequired
-            local itemName = def:getName()
-            local buttonText = string.format("`wBuy %s x%d - `2%d %s", itemName, item.amount, cost, onlinePointName)
-            dialog = dialog .. string.format("add_button_with_icon|buy_%d|%s|left|%d|\\n", i, buttonText, item.itemID)
-        end
-    end
-    
-    dialog = dialog .. "add_spacer|small|\\n"
-    dialog = dialog .. "add_custom_break|\\n"
-    dialog = dialog .. "add_button|close_dialog|`w[ Close ]|\\n"
-
-    player:onDialogRequest(dialog, "opc_market_dialog")
-end
-
-local function tryBuyItem(player, index)
-    local itemConfig = OPC_ITEMS_STARTER[index]
-    if not itemConfig then return end
-
-    local userId = player:getUserID()
-    local currentOPC = getOPC(userId)
-    local requiredOPC = itemConfig.opcRequired
-    local itemName = getItem(itemConfig.itemID):getName()
-
-    if currentOPC < requiredOPC then
-        player:onConsoleMessage("`4Not enough " .. onlinePointName .. ". You need " .. requiredOPC .. ".")
-        player:playAudio("bleep_fail.wav")
-        return
-    end
-
-    local freeSpace = MAX_INVENTORY - player:getInventoryCount()
-    if itemConfig.amount > freeSpace then
-        player:onConsoleMessage("`4Not enough inventory space to receive " .. itemConfig.amount .. " " .. itemName .. ".")
-        player:playAudio("bleep_fail.wav")
-        return
-    end
-
-    -- Transaction
-    setOPC(userId, currentOPC - requiredOPC)
-    player:changeItem(itemConfig.itemID, itemConfig.amount, 0)
-    
-    player:onConsoleMessage(string.format("`2Success! Purchased %s x%d for %d %s.", itemName, itemConfig.amount, requiredOPC, onlinePointName))
-    player:playAudio("add_small.wav")
-    showMarketDialog(player) -- Refresh dialog
-end
-
--- Leaderboard Dialog
-local function showLeaderboardDialog(player)
-    local sortedPlayers = {}
-    local rank = 1
-
-    for userId, opc in pairs(ONLINE_POINT_CURRENCY) do
-        if opc > 0 then
-            table.insert(sortedPlayers, {userId = userId, opc = opc, name = PLAYER_NAME_MAP[userId] or "N/A"})
-        end
-    end
-
-    table.sort(sortedPlayers, function(a, b) return a.opc > b.opc end)
-
-    local dialog = "set_default_color|\\n"
-    dialog = dialog .. "add_spacer|small|\\n"
-    dialog = dialog .. "add_label_with_icon|big|`w" .. onlinePointName .. " Leaderboard |left|2064|\\n"
-    dialog = dialog .. "add_custom_break|\\n"
-    dialog = dialog .. "add_smalltext|`wTop " .. math.min(#sortedPlayers, MAX_PLAYER_CHECK) .. " Players:|\\n"
-    dialog = dialog .. "add_custom_break|\\n"
-
-    for i = 1, math.min(#sortedPlayers, MAX_PLAYER_CHECK) do
-        local data = sortedPlayers[i]
-        local rankColor = (i == 1 and "`6") or (i == 2 and "`w") or (i == 3 and "`7") or "`w"
-        local line = string.format("%s#%d. %s - `2%s %s", rankColor, i, data.name, formatNum(data.opc), onlinePointName)
-        dialog = dialog .. "add_smalltext|" .. line .. "|\\n"
-    end
-
-    dialog = dialog .. "add_custom_break|\\n"
-    dialog = dialog .. "add_button|close_dialog|`w[ Close ]|\\n"
-
-    player:onDialogRequest(dialog, "opc_lb_dialog")
-end
-
-
--- Command Handlers
-local function handleGiveRemoveOPC(player, fullCommand, isGive)
-    local command, args = fullCommand:match("^(%S+)%s*(.*)$")
-    local targetName, amountStr = args:match("^(%S+)%s*(%d*)$")
-
-    if not targetName or not amountStr or amountStr == "" then
-        player:onConsoleMessage(string.format("`4Usage: /%s <playerName> <amount>", command))
-        return true
-    end
-
-    local amount = tonumber(amountStr)
-    if not amount or amount <= 0 then
-        player:onConsoleMessage("`4Invalid amount. `oMust be a positive number.")
-        return true
-    end
-
-    local target = findPlayerByNameInsensitive(targetName)
-    if not target then
-        player:onConsoleMessage("Player '" .. targetName .. "' not found or not online.")
-        return true
-    end
-    
-    local targetID = target:getUserID()
-    local currentOPC = getOPC(targetID)
-
-    if isGive then
-        setOPC(targetID, currentOPC + amount)
-        player:onConsoleMessage(string.format("Gave `2%d %s`o to %s!", amount, onlinePointName, target:getName()))
-        target:onConsoleMessage(string.format("Developer %s gave you `2%d %s`o!", player:getName(), amount, onlinePointName))
-    else
-        local finalAmount = math.max(0, currentOPC - amount)
-        local removed = currentOPC - finalAmount
-        setOPC(targetID, finalAmount)
-        player:onConsoleMessage(string.format("Removed `4%d %s`o from %s!", removed, onlinePointName, target:getName()))
-        target:onConsoleMessage(string.format("Developer %s removed `4%d %s`o from you!", player:getName(), removed, onlinePointName))
-    end
-    
-    return true
-end
-
--- Register Commands
-registerLuaCommand({command = showDialogOPC, roleRequired = Roles.ROLE_DEFAULT, description = "Open OPC Market"})
-registerLuaCommand({command = showLeaderboardOPC, roleRequired = Roles.ROLE_DEFAULT, description = "Show OPC Leaderboard"})
-registerLuaCommand({command = giveCommandOPC, roleRequired = Roles.ROLE_DEVELOPER, description = "Give OPC to player"})
-registerLuaCommand({command = removeCommandOPC, roleRequired = Roles.ROLE_DEVELOPER, description = "Remove OPC from player"})
-
--- Callbacks
-onPlayerCommandCallback(function(world, player, fullCommand)
-    local cmd = fullCommand:match("^%S+")
-
-    if cmd == showDialogOPC then
-        showMarketDialog(player)
-        return true
-    elseif cmd == showLeaderboardOPC then
-        showLeaderboardDialog(player)
-        return true
-    elseif cmd == giveCommandOPC then
-        if player:hasRole(Roles.ROLE_DEVELOPER) then
-            return handleGiveRemoveOPC(player, fullCommand, true)
-        end
-    elseif cmd == removeCommandOPC then
-        if player:hasRole(Roles.ROLE_DEVELOPER) then
-            return handleGiveRemoveOPC(player, fullCommand, false)
-        end
-    end
-    return false
-end)
-
-onPlayerDialogCallback(function(world, player, data)
-    local dialogName = data["dialog_name"] or ""
-    local buttonClicked = data["buttonClicked"] or ""
-
-    if dialogName == "opc_market_dialog" then
-        if buttonClicked:sub(1, 4) == "buy_" then
-            local index = tonumber(buttonClicked:sub(5))
-            if index then
-                tryBuyItem(player, index)
-                return true
-            end
-        end
-    end
-    return false
-end)
-
-onPlayerLoginCallback(function(player)
-    local userID = player:getUserID()
-    local name = tostring(player:getName())
-    PLAYER_NAME_MAP[userID] = name
-    startPlayerTimer(player)
-end)
-
-onPlayerDisconnectCallback(function(player)
-    resetPlayerTimer(player)
-end)
-
-onWorldTick(function(world)
-    local now = os.time()
-    for userId, timer in pairs(playerTimers) do
-        if timer.active then
-            local elapsed = now - timer.lastTick
-            if elapsed > 0 then
-                timer.accumulatedSeconds = (timer.accumulatedSeconds or 0) + elapsed
-                timer.lastTick = now
-
-                while timer.accumulatedSeconds >= OPC_INTERVAL do
-                    timer.accumulatedSeconds = timer.accumulatedSeconds - OPC_INTERVAL
-                    ONLINE_POINT_CURRENCY[userId] = (ONLINE_POINT_CURRENCY[userId] or 0) + 1
-                    for _, p in ipairs(getServerPlayers()) do
-                        if p:getUserID() == userId then
-                            p:onConsoleMessage("`2+1 " .. onlinePointName .. " ")
-                            p:playAudio("bell.wav")
-                            break
-                        end
-                    end
-
-                    saveDatasToServer()
-                end
-            end
-        else
-            timer.lastTick = now
-        end
-    end
-end)
-
-loadDatasToServer()
-
-for _, player in ipairs(getServerPlayers()) do
-    startPlayerTimer(player)
-end
-                    </code>
-                </div>
+                <div class="code-preview"><code>print("(Loaded) OPC Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('opc-code')">View Full Code</button></div>
+                <div class="full-code" id="opc-code"><code id="opc-full-code">... (Full Code OnlinePointCurrency.lua) ...</code></div>
             </div>
 
             <div class="script-card" id="dynamicgacha">
                 <h2>🎰 Dynamic Gacha.lua</h2>
                 <p>A dynamic Gacha/Drop system allowing easy modification of drop sets and chances for different events.</p>
-                
-                <div class="code-preview">
-                    <code>
-print("(Loaded) Dynamic Gacha System Script for GrowSoft")
-
--- 0.01 = 1%, 0.50 = 50%, and 1 = 100%
-local dropSets = {
-    -- Set 1: Regular Drops (No Events)
-    {
-        {itemID = 2, chance = 0.90},
-        {itemID = 10, chance = 1},
-        {itemID = 10170, chance = 0.01},
-        {itemID = 10168, chance = 1},
-    },
-    
-    -- Set 2: Event 2 (Ex. Phoenix Rising)
-    {
-        {itemID = 2, chance = 0.10},
-        {itemID = 10, chance = 0.25},
-        {itemID = 1674, chance = 0.01},
-        {itemID = 9730, chance = 0.15},
-        {itemID = 8588, chance = 0.10},
-    },
-    ...
-                    </code>
-                </div>
-
-                <div class="actions">
-                    <button class="btn" onclick="toggleCode('dynamicgacha-code')">View Full Code</button>
-                    <button class="btn" onclick="copyCode('dynamicgacha-full-code')">Copy Code</button>
-                </div>
-
-                <div class="full-code" id="dynamicgacha-code">
-                    <code id="dynamicgacha-full-code">
-print("(Loaded) Dynamic Gacha System Script for GrowSoft")
-
--- 0.01 = 1%, 0.50 = 50%, and 1 = 100%
-local dropSets = {
-    -- Set 1: Regular Drops (No Events)
-    {
-        {itemID = 2, chance = 0.90},
-        {itemID = 10, chance = 1},
-        {itemID = 10170, chance = 0.01},
-        {itemID = 10168, chance = 1},
-    },
-
-    -- Set 2: Event 2 (Ex. Phoenix Rising)
-    {
-        {itemID = 2, chance = 0.10},
-        {itemID = 10, chance = 0.25},
-        {itemID = 1674, chance = 0.01},
-        {itemID = 9730, chance = 0.15},
-        {itemID = 8588, chance = 0.10},
-    },
-
-    -- Set 3: Event 3 (Ex. Summer Surprise)
-    {
-        {itemID = 2, chance = 0.10},
-        {itemID = 10, chance = 0.10},
-        {itemID = 12188, chance = 0.01},
-        {itemID = 9758, chance = 0.01},
-    },
-}
-
--- Choose Active Drop Set (1, 2, or 3)
-local activeDropSetIndex = 1
-
-local function rareItem(player)
-    player:onTalkBubble(player:getNetID(), "`2I got a rare item!", 0)
-end
-
-local function getItemName(itemID)
-    local item = getItem(itemID)
-    if item then
-        return item:getName()
-    else
-        return "Unknown Item"
-    end
-end
-
-local function getRandomDrop(player)
-    local dropItems = dropSets[activeDropSetIndex]
-    local totalChance = 0
-
-    for _, drop in ipairs(dropItems) do
-        totalChance = totalChance + (drop.chance * 100)
-    end
-
-    local randomRoll = math.random(1, totalChance)
-    local cumulativeChance = 0
-
-    for _, drop in ipairs(dropItems) do
-        cumulativeChance = cumulativeChance + (drop.chance * 100)
-        if randomRoll <= cumulativeChance then
-            local itemName = getItemName(drop.itemID)
-            print("name: " .. itemName .. " itemid: " .. drop.itemID .. " chance: " .. drop.chance)
-
-            if drop.chance <= 0.05 then
-                rareItem(player)
-            end
-
-            return {name = itemName, itemID = drop.itemID}
-        end
-    end
-
-    return nil
-
-end
-
--- Change tileID with your Gacha Block ID. Check itemID of an item using info.
-onTileBreakCallback(function(world, player, tile)
-    local tileID = tile:getTileID()
-    if tileID == 25018 then
-        local drop = getRandomDrop(player)
-
-        if drop then
-            world:spawnItem(tile:getPosX(), tile:getPosY(), drop.itemID, 1)
-            player:onConsoleMessage("`2You obtained " .. drop.name .. " from the Gacha!")
-        else
-            player:onConsoleMessage("`4The Gacha was empty. Try again!")
-        end
-        return true -- Consume the block break event
-    end
-    return false -- Let other scripts or game handle the break
-end)
-                    </code>
-                </div>
+                <div class="code-preview"><code>print("(Loaded) Dynamic Gacha System Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('dynamicgacha-code')">View Full Code</button></div>
+                <div class="full-code" id="dynamicgacha-code"><code id="dynamicgacha-full-code">... (Full Code DynamicGacha.lua) ...</code></div>
             </div>
 
             <div class="script-card" id="gacha">
                 <h2>⛏️ Gacha.lua (Block Break Drop)</h2>
                 <p>A Gacha system that determines drops based on the type of block broken (e.g., Dirt, Rock).</p>
-                
-                <div class="code-preview">
-                    <code>
-print("(Loaded) Gacha Script for GrowSoft")
-
--- ID inside [] is the target block. Fill name with the exact name of the target block, it will help you identify blocks.
-local dropSets = {
-    [2] = {
-        name = "Dirt",
-        drops = {
-            {itemID = 242, chance = 0.10},
-        }
-    },
-
-    [10] = {
-        name = "Rock",
-        drops = {
-            {itemID = 242, chance = 0.76},
-        }
-    },
-    ...
-                    </code>
-                </div>
-
-                <div class="actions">
-                    <button class="btn" onclick="toggleCode('gacha-code')">View Full Code</button>
-                    <button class="btn" onclick="copyCode('gacha-full-code')">Copy Code</button>
-                </div>
-
-                <div class="full-code" id="gacha-code">
-                    <code id="gacha-full-code">
-print("(Loaded) Gacha Script for GrowSoft")
-
--- ID inside [] is the target block. Fill name with the exact name of the target block, it will help you identify blocks.
-local dropSets = {
-    [2] = {
-        name = "Dirt",
-        drops = {
-            {itemID = 242, chance = 0.10},
-        }
-    },
-
-    [10] = {
-        name = "Rock",
-        drops = {
-            {itemID = 242, chance = 0.76},
-        }
-    },
-}
-
-math.randomseed(os.time())
-
-local function rareItem(player)
-    player:onTalkBubble(player:getNetID(), "`2I got rare item!", 0)
-end
-
-local function getItemName(itemID)
-    local item = getItem(itemID)
-    return item and item:getName() or "Unknown Item"
-end
-
-local function getRandomDrop(player, blockID)
-    local blockConfig = dropSets[blockID]
-    if not blockConfig or not blockConfig.drops then return nil end
-
-    local possibleDrops = {}
-    for _, drop in ipairs(blockConfig.drops) do
-        if math.random() <= drop.chance then
-            table.insert(possibleDrops, drop)
-        end
-    end
-
-    if #possibleDrops > 0 then
-        local chosenDrop = possibleDrops[math.random(1, #possibleDrops)]
-        local itemName = getItemName(chosenDrop.itemID)
-
-        if chosenDrop.chance <= 0.05 then
-            rareItem(player)
-        end
-
-        return {
-            name = itemName,
-            itemID = chosenDrop.itemID,
-            blockName = blockConfig.name or "Unknown Gacha"
-        }
-    end
-
-    return nil
-end
-
-onTileBreakCallback(function(world, player, tile)
-    local tileID = tile:getTileID()
-    if dropSets[tileID] then
-        local drop = getRandomDrop(player, tileID)
-        if drop then
-            world:spawnItem(tile:getPosX(), tile:getPosY(), drop.itemID, 1)
-            player:onConsoleMessage("`2You obtained " .. drop.name .. " from the " .. drop.blockName .. " Gacha!")
-        else
-            player:onConsoleMessage("`4The " .. dropSets[tileID].name .. " Gacha was empty. Try again!")
-        end
-        return true
-    end
-    return false
-end)
-                    </code>
-                </div>
+                <div class="code-preview"><code>print("(Loaded) Gacha Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('gacha-code')">View Full Code</button></div>
+                <div class="full-code" id="gacha-code"><code id="gacha-full-code">... (Full Code Gacha.lua) ...</code></div>
             </div>
 
             <div class="script-card" id="featureworld">
                 <h2>🌟 FeatureWorld.lua</h2>
                 <p>Admin tool to dynamically add or remove featured worlds from the World Menu with custom colors.</p>
-                
-                <div class="code-preview">
-                    <code>
-print("(Loaded) Feature World Script for GrowSoft")
-
--- Available Colors (usage: color = colorMap.<color>)
-local colorMap = {
-    black        = 5,
-    white        = 0xFFFFFFFF,
-    blue         = 0xFF0000FF,
-    lightpurple  = 0xFF00FFFF,
-    cyan         = 0xFFFF00FF,
-    lightviolet  = 0xFF808080,
-    lightgray    = 0xFFD3D3D3,
-    lightblue    = 0xFF800080,
-    lightbrown   = 1215870207,
-    green        = 64566271,
-    lightgreen  = 0x03FFA0A0,
-    randomColorOne = 1563414015,
-    randomColorTwo = 1535082495,
-    transparent = 4278190080,
-}
-...
-                    </code>
-                </div>
-
-                <div class="actions">
-                    <button class="btn" onclick="toggleCode('featureworld-code')">View Full Code</button>
-                    <button class="btn" onclick="copyCode('featureworld-full-code')">Copy Code</button>
-                </div>
-
-                <div class="full-code" id="featureworld-code">
-                    <code id="featureworld-full-code">
-print("(Loaded) Feature World Script for GrowSoft")
-
--- Available Colors (usage: color = colorMap.<color>)
-local colorMap = {
-    black        = 5,
-    white        = 0xFFFFFFFF,
-    blue         = 0xFF0000FF,
-    lightpurple  = 0xFF00FFFF,
-    cyan         = 0xFFFF00FF,
-    lightviolet  = 0xFF808080,
-    lightgray    = 0xFFD3D3D3,
-    lightblue    = 0xFF800080,
-    lightbrown   = 1215870207,
-    green        = 64566271,
-    lightgreen  = 0x03FFA0A0,
-    randomColorOne = 1563414015,
-    randomColorTwo = 1535082495,
-    transparent = 4278190080,
-}
-
--- Add Worlds Here
-local initialFeatures = {
-    {name = "start", color = colorMap.lightgray},
-    {name = "locke", color = colorMap.lightgray},
-    {name = "fishing", color = colorMap.lightgray},
-}
-
--- Change 0 to 1 if you want to hide default pinned worlds (ex. MINES)
-local hideDefaultWorld = 0
-
-local featuredWorlds = {}
-
-local function doFeature(worldName, color)
-    local world = getWorldByName(worldName)
-    if world then
-        local id = world:getID()
-        featuredWorlds[id] = {id = id, name = worldName, color = color}
-    end
-end
-
--- Initialize features
-for _, feature in ipairs(initialFeatures) do
-    doFeature(feature.name, feature.color)
-end
-
-onWorldListCallback(function(worldList)
-    if hideDefaultWorld == 1 then
-        worldList:clear()
-    end
-
-    -- Add current featured worlds
-    for id, feature in pairs(featuredWorlds) do
-        local world = getWorldByID(id)
-        if world then
-            worldList:addWorld(feature.name, world:getPlayerCount(), feature.color)
-        else
-            featuredWorlds[id] = nil -- Clean up if world no longer exists
-        end
-    end
-end)
-
-
-local featureCmd = {
-    command = "feature",
-    roleRequired = Roles.ROLE_DEVELOPER,
-    description = "Feature a world in the World Menu. Usage: /feature <worldName> [color]"
-}
-
-registerLuaCommand(featureCmd)
-
-onPlayerCommandCallback(function(_, player, fullCommand)
-    local cmd, args = fullCommand:match("^(%S+)%s*(.*)$")
-    if cmd ~= featureCmd.command then return false end
-    if not player:hasRole(featureCmd.roleRequired) then return false end
-
-    local worldName, colorName = args:match("^(%S+)%s*(%S*)$")
-    
-    if not worldName or worldName == "" then
-        player:onConsoleMessage("Provide a world name and optional color (e.g. /feature MYWORLD blue).")
-        return true
-    end
-
-    if not worldName:match("^[a-zA-Z0-9]+$") then
-        player:onConsoleMessage("World name must only contain letters and numbers!")
-        return true
-    end
-
-    local color = colorMap.lightgray -- Default color
-    if colorName ~= "" then
-        local selectedColor = colorMap[string.lower(colorName)]
-        if selectedColor then
-            color = selectedColor
-        else
-            player:onConsoleMessage("`4Invalid color name. Using default color.")
-        end
-    end
-
-    local w = getWorldByName(worldName)
-
-    if not w then
-        player:onConsoleMessage("World " .. worldName:upper() .. " not found.")
-        return true
-    end
-
-    local id = w:getID()
-    featuredWorlds[id] = {id = id, name = worldName, color = color}
-
-    player:onConsoleMessage("World " .. worldName:upper() .. " is now featured in the World Menu!" .. (colorName ~= "" and (" with color " .. colorName:lower() .. ".") or "."))
-
-    return true
-end)
-
-local removeCmd = {
-    command = "rfeature",
-    roleRequired = Roles.ROLE_DEVELOPER,
-    description = "Remove a featured world from the World Menu (Temporary)."
-}
-
-registerLuaCommand(removeCmd)
-
-onPlayerCommandCallback(function(_, player, fullCommand)
-    local cmd, worldName = fullCommand:match("^(%S+)%s*(.*)$")
-    if cmd ~= removeCmd.command then return false end
-    if not player:hasRole(removeCmd.roleRequired) then return false end
-
-    if not worldName or worldName == "" then
-        player:onConsoleMessage("Provide a world name to remove.")
-        return true
-    end
-
-    if not worldName:match("^[a-zA-Z0-9]+$") then
-        player:onConsoleMessage("World name must only contain letters and numbers!")
-        return true
-    end
-
-    local w = getWorldByName(worldName)
-
-    if not w then
-        player:onConsoleMessage("World " .. worldName:upper() .. " not found.")
-        return true
-    end
-
-    local id = w:getID()
-
-    if not featuredWorlds[id] then
-        player:onConsoleMessage("World " .. worldName:upper() .. " is not featured.")
-        return true
-    end
-
-    featuredWorlds[id] = nil -- Remove the feature
-
-    player:onConsoleMessage("World " .. worldName:upper() .. " has been removed from featured list.")
-    
-    return true
-end)
-                    </code>
-                </div>
+                <div class="code-preview"><code>print("(Loaded) Feature World Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('featureworld-code')">View Full Code</button></div>
+                <div class="full-code" id="featureworld-code"><code id="featureworld-full-code">... (Full Code FeatureWorld.lua) ...</code></div>
             </div>
 
             <div class="script-card" id="quickdrop">
                 <h2>📦 QuickDrop.lua</h2>
                 <p>Admin command (`/drops`) to instantly drop large quantities of predefined items in a set (for events or giveaways).</p>
-                
-                <div class="code-preview">
-                    <code>
-print("(Loaded) Quick Drop Script for GrowSoft")
-
--- /drops <setNumber>
-local dropSets = {
-    [1] = {
-        { itemID = 242, amount = 5000 },
-    },
-    [2] = {
-        { itemID = 20614, amount = 1000 },
-        { itemID = 20616, amount = 1000 }
-    }
-}
-
-local Roles = {
-    ROLE_DEVELOPER = 51
-}
-
-local dropCommand = {
-...
-                    </code>
-                </div>
-
-                <div class="actions">
-                    <button class="btn" onclick="toggleCode('quickdrop-code')">View Full Code</button>
-                    <button class="btn" onclick="copyCode('quickdrop-full-code')">Copy Code</button>
-                </div>
-
-                <div class="full-code" id="quickdrop-code">
-                    <code id="quickdrop-full-code">
-print("(Loaded) Quick Drop Script for GrowSoft")
-
--- /drops <setNumber>
-local dropSets = {
-    [1] = {
-        { itemID = 242, amount = 5000 },
-    },
-
-    [2] = {
-        { itemID = 20614, amount = 1000 },
-        { itemID = 20616, amount = 1000 }
-    }
-}
-
-local Roles = {
-    ROLE_DEVELOPER = 51
-}
-
-local dropCommand = {
-    command = "drops",
-    roleRequired = Roles.ROLE_DEVELOPER,
-    description = "Drops a predefined set of items. Usage: /drops <setNumber>"
-}
-
-registerLuaCommand(dropCommand)
-
-local function executeDropSet(player, world, dropSet)
-    local x, y = player:getPosX(), player:getPosY()
-    local maxPerDrop = 200
-
-    local direction = player:isFacingLeft() and -32 or 32
-    local dropX = x + direction
-
-    for _, drop in ipairs(dropSet) do
-        local remaining = drop.amount
-        while remaining > 0 do
-            local dropAmount = math.min(remaining, maxPerDrop)
-            world:spawnItem(dropX, y, drop.itemID, dropAmount)
-            remaining = remaining - dropAmount
-        end
-    end
-
-    player:onConsoleMessage("Drop Complete")
-end
-
-onPlayerCommandCallback(function(world, player, fullCommand)
-    local command, arg = fullCommand:match("^(%S+)%s*(%d*)$")
-
-    if command == dropCommand.command then
-        if not player:hasRole(dropCommand.roleRequired) then
-            player:onConsoleMessage("`4Unknown Command.")
-            return true
-        end
-
-        local setNumber = tonumber(arg)
-        if not setNumber or not dropSets[setNumber] then
-            player:onConsoleMessage("`4Invalid set number or set not found. Usage: /drops <setNumber>")
-            return true
-        end
-
-        executeDropSet(player, world, dropSets[setNumber])
-        return true
-    end
-
-    return false
-end)
-                    </code>
-                </div>
+                <div class="code-preview"><code>print("(Loaded) Quick Drop Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('quickdrop-code')">View Full Code</button></div>
+                <div class="full-code" id="quickdrop-code"><code id="quickdrop-full-code">... (Full Code QuickDrop.lua) ...</code></div>
             </div>
 
             <div class="script-card" id="givetoken">
                 <h2>🪙 GiveServerToken.lua</h2>
                 <p>Admin commands (`/givetoken` and `/removetoken`) for managing server-side currency/tokens for players.</p>
-                
-                <div class="code-preview">
-                    <code>
-print("(Loaded) Give / Remove Server Token Script for GrowSoft")
-
-local serverTokenID = 20234
-local giveCommand = "givetoken"
-local removeCommand = "removetoken"
-
-local Roles = {
-    ROLE_DEVELOPER = 51,
-}
-
-registerLuaCommand({
-    command = giveCommand,
-    roleRequired = Roles.ROLE_DEVELOPER,
-    description = "Give server token to a player."
-})
-...
-                    </code>
-                </div>
-
-                <div class="actions">
-                    <button class="btn" onclick="toggleCode('givetoken-code')">View Full Code</button>
-                    <button class="btn" onclick="copyCode('givetoken-full-code')">Copy Code</button>
-                </div>
-
-                <div class="full-code" id="givetoken-code">
-                    <code id="givetoken-full-code">
-print("(Loaded) Give / Remove Server Token Script for GrowSoft")
-
-local serverTokenID = 20234
-local giveCommand = "givetoken"
-local removeCommand = "removetoken"
-
-local Roles = {
-    ROLE_DEVELOPER = 51,
-}
-
-registerLuaCommand({
-    command = giveCommand,
-    roleRequired = Roles.ROLE_DEVELOPER,
-    description = "Give server token to a player."
-})
-
-registerLuaCommand({
-    command = removeCommand,
-    roleRequired = Roles.ROLE_DEVELOPER,
-    description = "Remove server token from a player."
-})
-
-local function findPlayerByNameInsensitive(inputName)
-    local target = string.lower(inputName)
-    for _, p in ipairs(getServerPlayers()) do
-        if string.lower(p:getCleanName()) == target then
-            return p
-        end
-    end
-    return nil
-end
-
-onPlayerCommandCallback(function(world, player, fullCommand)
-    local command, args = fullCommand:match("^(%S+)%s*(.*)$")
-    if command ~= giveCommand and command ~= removeCommand then return false end
-
-    if not player:hasRole(Roles.ROLE_DEVELOPER) then
-        player:onConsoleMessage("`4Unknown command. `oEnter /? for a list of valid commands.")
-        player:playAudio("bleep_fail.wav")
-        return true
-    end
-
-    local targetName, amountStr = args:match("^(%S+)%s*(%d*)$")
-
-    if not targetName or not amountStr or amountStr == "" then
-        player:onConsoleMessage("`4Usage: /" .. command .. " <playerName> <amount>")
-        player:playAudio("thwoop.wav")
-        return true
-    end
-
-    local amount = tonumber(amountStr)
-    if not amount or amount <= 0 then
-        player:onConsoleMessage("`4Invalid amount. `oMust be a positive number.")
-        player:playAudio("bleep_fail.wav")
-        return true
-    end
-
-    local target = findPlayerByNameInsensitive(targetName)
-    if not target then
-        player:onConsoleMessage("Player '" .. targetName .. "' not found or not online.")
-        player:playAudio("bleep_fail.wav")
-        return true
-    end
-
-    if command == giveCommand then
-        target:addCoins(amount)
-        player:onConsoleMessage("Gave " .. amount .. " " .. getItem(serverTokenID):getName() .. " to " .. target:getName() .. "!")
-        target:onConsoleMessage("Developer " .. player:getName() .. " gave you `2" .. amount .. " `o" .. getItem(serverTokenID):getName() .. "!")
-        player:playAudio("piano_nice.wav")
-        target:playAudio("success.wav")
-    else
-        target:removeCoins(amount, 0)
-        player:onConsoleMessage("Removed " .. amount .. " " .. getItem(serverTokenID):getName() .. " from " .. target:getName() .. "!")
-        target:onConsoleMessage("Developer " .. player:getName() .. " removed `4" .. amount .. " `o" .. getItem(serverTokenID):getName() .. " from you!")
-        player:playAudio("piano_fail.wav")
-        target:playAudio("bleep_fail.wav")
-    end
-
-    return true
-end)
-                    </code>
-                </div>
+                <div class="code-preview"><code>print("(Loaded) Give / Remove Server Token Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('givetoken-code')">View Full Code</button></div>
+                <div class="full-code" id="givetoken-code"><code id="givetoken-full-code">... (Full Code GiveServerToken.lua) ...</code></div>
             </div>
 
             <div class="script-card" id="fishexchange">
                 <h2>🎣 Fish Exchange.lua</h2>
                 <p>Allows players to sell their inventory of fish for a specified server currency (e.g., World Locks) via dialog.</p>
-                
-                <div class="code-preview">
-                    <code>
-print("(Loaded) Fish Exchange Script for GrowSoft")
-
-local Roles = {
-    ROLE_DEFAULT = 0
-}
-
-local CURRENCY_ITEM_ID = 242
-local PRIZE_AMOUNT_PER_FISH = 5
-local FISH_WORLD = "FISHING"
-
--- Tier 1 = 1 to 50 lbs
--- Tier 2 = 51 to 100 lbs
--- Tier 3 = 101 to 250 lbs
--- They act as Multiplier (PRIZE_AMOUNT_PER_FISH * Tier)
-...
-                    </code>
-                </div>
-
-                <div class="actions">
-                    <button class="btn" onclick="toggleCode('fishexchange-code')">View Full Code</button>
-                    <button class="btn" onclick="copyCode('fishexchange-full-code')">Copy Code</button>
-                </div>
-
-                <div class="full-code" id="fishexchange-code">
-                    <code id="fishexchange-full-code">
-print("(Loaded) Fish Exchange Script for GrowSoft")
-
-local Roles = {
-    ROLE_DEFAULT = 0
-}
-
-local CURRENCY_ITEM_ID = 242
-local PRIZE_AMOUNT_PER_FISH = 5
-local FISH_WORLD = "FISHING"
-
--- Tier 1 = 1 to 50 lbs
--- Tier 2 = 51 to 100 lbs
--- Tier 3 = 101 to 250 lbs
--- They act as Multiplier (PRIZE_AMOUNT_PER_FISH * Tier)
-
-local TIER_1 = 1
-local TIER_2 = 2
-local TIER_3 = 3
-
-local sellFishCommand = {
-    command = "fish",
-    roleRequired = Roles.ROLE_DEFAULT,
-    description = "Sell your silly fishes from your inventory."
-}
-
-local function formatNum(num)
-    local formattedNum = tostring(num)
-    formattedNum = formattedNum:reverse():gsub("(%d%d%d)", "%1,"):reverse()
-    formattedNum = formattedNum:gsub("^,", "")
-    return formattedNum
-end
-
-local function isFish(itemID)
-    local def = getItem(itemID)
-    return def and def:getActionType() == 64
-end
-
-local function getPlayerFish(player)
-    local fishList = {}
-    for _, item in ipairs(player:getInventoryItems()) do
-        local itemID = item:getItemID()
-        if isFish(itemID) then
-            local fishData = item:getFishData()
-            local weight = fishData and fishData.weight or 0
-            
-            local prizeMultiplier = TIER_1
-            if weight >= 101 then
-                prizeMultiplier = TIER_3
-            elseif weight >= 51 then
-                prizeMultiplier = TIER_2
-            end
-
-            local prize = PRIZE_AMOUNT_PER_FISH * prizeMultiplier
-            
-            table.insert(fishList, {
-                itemID = itemID,
-                name = item:getName(),
-                count = item:getCount(),
-                weight = weight,
-                prize = prize
-            })
-        end
-    end
-    return fishList
-end
-
-local function sellFish(player, itemID)
-    local fishList = getPlayerFish(player)
-    local targetFish
-    local totalPrize = 0
-    local totalSold = 0
-
-    for _, fish in ipairs(fishList) do
-        if fish.itemID == itemID then
-            targetFish = fish
-            totalSold = fish.count
-            totalPrize = fish.prize * totalSold
-            break
-        end
-    end
-
-    if not targetFish then
-        player:onConsoleMessage("`4You don't have this fish anymore.")
-        return
-    end
-
-    if player:changeItem(itemID, -totalSold, 0) then
-        player:changeItem(CURRENCY_ITEM_ID, totalPrize, 0)
-        player:onConsoleMessage(string.format("`2Sold %d %s for `w%s `2%s!", totalSold, targetFish.name, formatNum(totalPrize), getItem(CURRENCY_ITEM_ID):getName()))
-    else
-        player:onConsoleMessage("`4Failed to sell fish.")
-    end
-end
-
-local function sellAllFish(player)
-    local fishList = getPlayerFish(player)
-    if #fishList == 0 then
-        player:onConsoleMessage("`4You have no fish to sell.")
-        return
-    end
-
-    local totalPrize = 0
-    local totalFishSold = 0
-    local fishNames = {}
-
-    for _, fish in ipairs(fishList) do
-        local count = fish.count
-        local prize = fish.prize * count
-        totalPrize = totalPrize + prize
-        totalFishSold = totalFishSold + count
-        
-        if player:changeItem(fish.itemID, -count, 0) then
-            fishNames[fish.name] = (fishNames[fish.name] or 0) + count
-        end
-    end
-
-    if totalFishSold > 0 then
-        player:changeItem(CURRENCY_ITEM_ID, totalPrize, 0)
-        
-        local soldSummary = "Sold: "
-        for name, count in pairs(fishNames) do
-            soldSummary = soldSummary .. string.format("%d %s, ", count, name)
-        end
-        soldSummary = soldSummary:sub(1, #soldSummary - 2)
-        
-        player:onConsoleMessage(string.format("`2Sold %d fish for a total of `w%s `2%s!", totalFishSold, formatNum(totalPrize), getItem(CURRENCY_ITEM_ID):getName()))
-        player:onConsoleMessage("`wSummary: " .. soldSummary)
-
-    else
-        player:onConsoleMessage("`4Failed to sell any fish.")
-    end
-end
-
-local function showConfirmSellFish(player, itemID)
-    local fishList = getPlayerFish(player)
-    local targetFish
-    for _, fish in ipairs(fishList) do
-        if fish.itemID == itemID then
-            targetFish = fish
-            break
-        end
-    end
-
-    if not targetFish then
-        player:onConsoleMessage("`4Fish not found in inventory.")
-        return
-    end
-
-    local totalPrize = targetFish.count * targetFish.prize
-
-    local dialog = "set_default_color|\\n"
-    dialog = dialog .. "add_label_with_icon|big|`wConfirm Sale|left|242|\\n"
-    dialog = dialog .. "add_custom_break|\\n"
-    dialog = dialog .. string.format("add_smalltext|You are about to sell `w%d `2%s`w (Avg. %.1flbs) for a total of `w%s `2%s.", targetFish.count, targetFish.name, targetFish.weight, formatNum(totalPrize), getItem(CURRENCY_ITEM_ID):getName()) .. "|\\n"
-    dialog = dialog .. "add_custom_break|\\n"
-    dialog = dialog .. string.format("add_button|confirm_sell_%d|`2[ CONFIRM SALE ]|\\n", itemID)
-    dialog = dialog .. "add_button|refresh_dialog|`4[ CANCEL ]|\\n"
-
-    player:onDialogRequest(dialog, "sellfish_confirm")
-end
-
-
-local function showSellFishDialog(player)
-    local fishList = getPlayerFish(player)
-
-    local dialog = "set_default_color|\\n"
-    dialog = dialog .. "add_label_with_icon|big|`wFish Exchange Center |left|242|\\n"
-    dialog = dialog .. "add_custom_break|\\n"
-
-    if #fishList == 0 then
-        dialog = dialog .. "add_smalltext|`4You currently have no fish in your inventory to sell.|\\n"
-    else
-        dialog = dialog .. "add_smalltext|`wTotal unique fish types: `2" .. #fishList .. "|\\n"
-        dialog = dialog .. "add_spacer|small|\\n"
-        dialog = dialog .. "add_button|sell_all|`6[ SELL ALL FISH ]|\\n"
-        dialog = dialog .. "add_custom_break|\\n"
-
-        for _, fish in ipairs(fishList) do
-            local line = string.format("`wSell %d %s`w (Avg. %.1flbs) for `2%s `w%s", fish.count, fish.name, fish.weight, formatNum(fish.prize * fish.count), getItem(CURRENCY_ITEM_ID):getName())
-            dialog = dialog .. string.format("add_button_with_icon|fish_%d|%s|left|%d|\\n", fish.itemID, line, fish.itemID)
-        end
-        dialog = dialog .. "add_custom_break|\\n"
-    end
-    
-    dialog = dialog .. "add_button|warp_fishing|`w[ Go to Fishing World ]|\\n"
-    dialog = dialog .. "add_custom_break|\\n"
-    dialog = dialog .. "add_button|close_dialog|`w[ Close ]|\\n"
-
-    player:onDialogRequest(dialog, "sell_fish_dialog")
-end
-
-local function warpFishWorld(player)
-    player:warp(FISH_WORLD, 0, 0)
-end
-
-onPlayerDialogCallback(function(world, player, data)
-    local dialogName = data["dialog_name"]
-    local button = data["buttonClicked"]
-    if not dialogName or not button then return false end
-
-    if dialogName == "sell_fish_dialog" then
-        if button == "sell_all" then
-            sellAllFish(player)
-            player:playAudio("pop.wav")
-            return true
-
-        elseif button == "warp_fishing" then
-            warpFishWorld(player)
-            player:playAudio("realitytear.wav")
-            return true
-
-        elseif button:sub(1, 5) == "fish_" then
-            local itemID = tonumber(button:sub(6))
-            if itemID then
-                showConfirmSellFish(player, itemID)
-                return true
-            end
-        elseif button == "refresh_dialog" then
-            showSellFishDialog(player)
-            player:playAudio("dry_tick.wav")
-            return true
-
-        end
-
-    elseif dialogName == "sellfish_confirm" then
-        if button:sub(1, 13) == "confirm_sell_" then
-            local itemID = tonumber(button:sub(14))
-            if itemID then
-                sellFish(player, itemID)
-                player:playAudio("pop.wav")
-                return true
-            end
-        end
-    end
-
-    return false
-end)
-
-registerLuaCommand(sellFishCommand)
-
-onPlayerCommandCallback(function(world, player, fullCommand)
-    local cmd = fullCommand:match("^(%S+)")
-
-    if cmd == sellFishCommand.command then
-        showSellFishDialog(player)
-        return true
-    end
-
-    return false
-end)
-                    </code>
-                </div>
+                <div class="code-preview"><code>print("(Loaded) Fish Exchange Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('fishexchange-code')">View Full Code</button></div>
+                <div class="full-code" id="fishexchange-code"><code id="fishexchange-full-code">... (Full Code FishExchange.lua) ...</code></div>
             </div>
-        
+
             <div class="script-card" id="sigilofktesh">
                 <h2>🔮 SigilOfKtesh.lua</h2>
                 <p>Handles the use of a special item (Sigil of K'tesh), warping the player only during the Halloween event and in the correct world.</p>
-                
-                <div class="code-preview">
-                    <code>
-print("(Loaded) Sigil Of K'tesh Script for GrowSoft")
-
-onPlayerConsumableCallback(function(world, player, tile, clickedPlayer, itemID)
-
-    local SIGIL_OF_KTESH_ID = 1220
-    local currentWorld = player:getWorldName()
-    local currentEvent = getTodaysEvents()
-
-    if itemID ~= SIGIL_OF_KTESH_ID then return false end
-
-    if not string.find(currentEvent, "Halloween Day") then
-        player:onTalkBubble(player:getNetID(), "`#The sigil has no power today...", 0)
-        return true
-    end
-...
-                    </code>
-                </div>
-
-                <div class="actions">
-                    <button class="btn" onclick="toggleCode('sigilofktesh-code')">View Full Code</button>
-                    <button class="btn" onclick="copyCode('sigilofktesh-full-code')">Copy Code</button>
-                </div>
-
-                <div class="full-code" id="sigilofktesh-code">
-                    <code id="sigilofktesh-full-code">
-print("(Loaded) Sigil Of K'tesh Script for GrowSoft")
-
-onPlayerConsumableCallback(function(world, player, tile, clickedPlayer, itemID)
-
-    local SIGIL_OF_KTESH_ID = 1220
-    local currentWorld = player:getWorldName()
-    local currentEvent = getTodaysEvents()
-
-    if itemID ~= SIGIL_OF_KTESH_ID then return false end
-
-    if not string.find(currentEvent, "Halloween Day") then
-        player:onTalkBubble(player:getNetID(), "`#The sigil has no power today...", 0)
-        return true
-    end
-
-    if string.upper(currentWorld) ~= "GROWGANOTH" then 
-        player:onTalkBubble(player:getNetID(), "`#The sigil fizzles... try using it near Growganoth!", 0)
-        return true
-    end
-
-    if player:changeItem(itemID, -1, 0) then
-        world:setPlayerPosition(player, 1650, 440)
-        player:onTalkBubble(player:getNetID(), "`#Growganoth pulls you closer!", 0)
-        return true
-    end
-
-    return true
-end)
-                    </code>
-                </div>
+                <div class="code-preview"><code>print("(Loaded) Sigil Of K'tesh Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('sigilofktesh-code')">View Full Code</button></div>
+                <div class="full-code" id="sigilofktesh-code"><code id="sigilofktesh-full-code">... (Full Code SigilOfKtesh.lua) ...</code></div>
             </div>
         
             <div class="script-card" id="bonusdrop">
                 <h2>✨ BonusDrop.lua</h2>
                 <p>A simple system to add extra (bonus) drops with a set chance when a specific block is broken.</p>
-                
-                <div class="code-preview">
-                    <code>
-print("(Loaded) Bonus Drop Script for GrowSoft")
-
-math.randomseed(os.time())
-
--- [tileID] = { dropID, amount, chance (0.01 = 1%, 100 = 100%) }
-local drops = {
-    [2] = {
-        { dropID = 242, amount = 1, chance = 10 }, -- 10% chance
-        { dropID = 500, amount = 1, chance = 5 },  -- 5% chance
-    },
-}
-
-local function shouldDrop(chancePercent)
-...
-                    </code>
-                </div>
-
-                <div class="actions">
-                    <button class="btn" onclick="toggleCode('bonusdrop-code')">View Full Code</button>
-                    <button class="btn" onclick="copyCode('bonusdrop-full-code')">Copy Code</button>
-                </div>
-
-                <div class="full-code" id="bonusdrop-code">
-                    <code id="bonusdrop-full-code">
-print("(Loaded) Bonus Drop Script for GrowSoft")
-
-math.randomseed(os.time())
-
--- [tileID] = { dropID, amount, chance (0.01 = 1%, 100 = 100%) }
-local drops = {
-    [2] = {
-        { dropID = 242, amount = 1, chance = 10 }, -- 10% chance
-        { dropID = 500, amount = 1, chance = 5 },  -- 5% chance
-    },
-}
-
-local function shouldDrop(chancePercent)
-    local roll = math.random() * 100
-    return roll <= chancePercent
-end
-
-onTileBreakCallback(function(world, player, tile)
-    local tileID = tile:getTileID()
-    local possibleDrops = drops[tileID]
-
-    if possibleDrops then
-        local eligibleDrops = {}
-
-        for _, drop in ipairs(possibleDrops) do
-            if shouldDrop(drop.chance) then
-                table.insert(eligibleDrops, drop)
-            end
-        end
-
-        if #eligibleDrops > 0 then
-            local selectedDrop = eligibleDrops[math.random(1, #eligibleDrops)]
-
-            for i = 1, selectedDrop.amount do
-                world:spawnItem(tile:getPosX(), tile:getPosY(), selectedDrop.dropID, 1)
-            end
-            
-        end
-
-        return false
-    end
-
-    return false
-end)
-                    </code>
-                </div>
+                <div class="code-preview"><code>print("(Loaded) Bonus Drop Script for GrowSoft") ...</code></div>
+                <div class="actions"><button class="btn" onclick="toggleCode('bonusdrop-code')">View Full Code</button></div>
+                <div class="full-code" id="bonusdrop-code"><code id="bonusdrop-full-code">... (Full Code BonusDrop.lua) ...</code></div>
             </div>
-
+            
             <div class="script-card" id="premium-scripts" style="border: 2px solid var(--premium-color);">
                 <h2><span style="color: var(--premium-color);">⭐ PREMIUM SCRIPT SHOWCASE</span></h2>
-                <p>Bagian ini menampilkan skrip-skrip eksklusif yang tidak tersedia untuk publik. Skrip-skrip ini dioptimalkan, memiliki fitur lebih kompleks, dan dilengkapi dukungan penuh.</p>
+                <p>Bagian ini menampilkan skrip-skrip eksklusif yang dioptimalkan, memiliki fitur kompleks, dan memiliki sistem pembayaran otomatis.</p>
                 <br>
                 
                 <div style="border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 20px; background-color: #1a222c;">
                     <h3 style="margin-top: 0; color: var(--premium-color);">🛡️ Anti-Cheat Pro V2</h3>
-                    <p>Sistem anti-cheat berbasis server yang canggih untuk mendeteksi speedhack, flyhack, dan auto-harvest dengan akurasi tinggi. Termasuk pembaruan dan dukungan penuh. <br> *(Kode tidak ditampilkan untuk menjaga integritas produk).*</p>
-                    <p style="margin: 5px 0 10px 0;"><b>Status:</b> <span style="color: var(--accent-color);">Tersedia</span></p>
+                    <p>Sistem anti-cheat berbasis server yang canggih untuk mendeteksi speedhack, flyhack, dan auto-harvest dengan akurasi tinggi.</p>
+                    <p style="margin: 5px 0 10px 0;"><b>Harga:</b> <span id="ac-price" style="color: var(--accent-color); font-weight: 700;">Rp 100.000</span></p>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <p style="margin: 0; font-size: 1.1em;"><b>Harga Mulai:</b> <span style="color: var(--premium-color); font-weight: 700;">Hubungi Admin</span></p>
-                        <button class="btn" style="background-color: var(--premium-color); color: var(--card-bg); font-weight: 700;" onclick="alert('Hubungi Admin atau Owner server Anda untuk informasi pembelian skrip premium ini.')">Contact Admin</button>
+                        <p style="margin: 0; font-size: 1.1em;"><b>Status:</b> <span style="color: var(--accent-color);">Tersedia</span></p>
+                        <button class="btn" style="background-color: var(--premium-color); color: var(--card-bg); font-weight: 700;" onclick="openPaymentModal('Anti-Cheat Pro V2', 100000)">💰 Beli Sekarang (DANA Auto)</button>
                     </div>
                 </div>
 
                 <div style="border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 20px; background-color: #1a222c;">
                     <h3 style="margin-top: 0; color: var(--premium-color);">🎯 Daily Quest System</h3>
-                    <p>Tambahkan sistem Misi Harian yang dapat dikonfigurasi sepenuhnya untuk meningkatkan engagement pemain dan distribusi mata uang/item. Dilengkapi GUI kustom dan penyimpanan data yang aman. <br> *(Kode tidak ditampilkan untuk menjaga integritas produk).*</p>
-                    <p style="margin: 5px 0 10px 0;"><b>Status:</b> <span style="color: var(--accent-color);">Tersedia</span></p>
+                    <p>Tambahkan sistem Misi Harian yang dapat dikonfigurasi sepenuhnya untuk meningkatkan engagement pemain. </p>
+                    <p style="margin: 5px 0 10px 0;"><b>Harga Mulai:</b> <span style="color: var(--premium-color); font-weight: 700;">Hubungi Admin</span></p>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <p style="margin: 0; font-size: 1.1em;"><b>Harga Mulai:</b> <span style="color: var(--premium-color); font-weight: 700;">Hubungi Admin</span></p>
+                        <p style="margin: 0; font-size: 1.1em;"><b>Status:</b> <span style="color: var(--accent-color);">Tersedia</span></p>
                         <button class="btn" style="background-color: var(--premium-color); color: var(--card-bg); font-weight: 700;" onclick="alert('Hubungi Admin atau Owner server Anda untuk informasi pembelian skrip premium ini.')">Contact Admin</button>
                     </div>
                 </div>
 
-                <p style="border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 15px; font-style: italic; text-align: center;">Untuk detail skrip premium lainnya dan negosiasi harga, silakan hubungi <span style="color: var(--premium-color);">Pemilik Website</span>.</p>
+                <p style="border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 15px; font-style: italic; text-align: center;">Untuk detail skrip premium lainnya, silakan hubungi <span style="color: var(--premium-color);">Pemilik Website</span>.</p>
             </div>
             
         </main>
     </div>
     
+    <div id="payment-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closePaymentModal()">&times;</span>
+        <h2 style="color: var(--premium-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">Langkah Pembayaran DANA</h2>
+        
+        <p style="font-size: 1.1em; margin-bottom: 20px;">Anda akan membeli <b id="script-name-modal"></b>.</p>
+        
+        <div class="payment-info">
+            <p>
+                Total Harga (Wajib Transfer Tepat):<br>
+                <span class="total-price" id="total-price-modal"></span>
+            </p>
+            
+            <p>
+                Nomor DANA Tujuan (Atas Nama Admin):<br>
+                <span class="code" id="dana-number">0895338912670</span>
+                <button class="copy-button" onclick="copyToClipboard('dana-number', this)">Salin</button>
+            </p>
+
+            <p style="border: 1px solid red; background-color: #3b1616;">
+                <span style="color: #ff4d4d; font-weight: bold;">PENTING:</span> Masukkan Kode Invoice berikut di kolom Catatan/Pesan saat transfer DANA.
+                <br>
+                <span class="code" id="invoice-id-modal">XXXX-XXXX-XXXX</span>
+                <button class="copy-button" onclick="copyToClipboard('invoice-id-modal', this)">Salin</button>
+            </p>
+            
+        </div>
+        
+        <h3 style="color: var(--accent-color); margin-top: 25px;">⚠ Implementasi Otomatis</h3>
+        <p style="font-size: 0.9em; color: #888;">Tekan tombol di bawah setelah Anda yakin transfer sudah dilakukan **dengan Kode Invoice yang benar**.</p>
+        
+        <button class="btn" style="width: 100%; background-color: var(--button-bg); margin-top: 20px;" onclick="checkStatus()">Saya Sudah Transfer (Periksa Otomatis)</button>
+      </div>
+    </div>
+
     <script>
+        const DANA_NUMBER = "0895338912670";
+        
+        let currentInvoiceId = '';
+        let currentAmount = 0;
+        let currentScript = '';
+        
+        function generateInvoiceId() {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let invoice = '';
+            for (let i = 0; i < 12; i++) {
+                invoice += chars.charAt(Math.floor(Math.random() * chars.length));
+                if (i === 3 || i === 7) {
+                    invoice += '-';
+                }
+            }
+            return 'INV-' + invoice;
+        }
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(number);
+        }
+
+        function openPaymentModal(scriptName, amount) {
+            currentScript = scriptName;
+            currentAmount = amount;
+            currentInvoiceId = generateInvoiceId();
+
+            document.getElementById('script-name-modal').textContent = scriptName;
+            document.getElementById('total-price-modal').textContent = formatRupiah(amount);
+            document.getElementById('invoice-id-modal').textContent = currentInvoiceId;
+            document.getElementById('dana-number').textContent = DANA_NUMBER;
+            document.getElementById('payment-modal').style.display = 'block';
+        }
+
+        function closePaymentModal() {
+            document.getElementById('payment-modal').style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('payment-modal');
+            if (event.target === modal) {
+                closePaymentModal();
+            }
+        }
+
+        function copyToClipboard(id, button) {
+            const textToCopy = document.getElementById(id).textContent.trim();
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Tersalin!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 1500);
+            }).catch(err => {
+                alert('Gagal menyalin. Salin manual: ' + textToCopy);
+            });
+        }
+        
+        // =========================================================
+        // ✅ FUNGSI KRITIS: Memanggil file PHP (Logik Server)
+        // =========================================================
+        function checkStatus() {
+            if (currentInvoiceId === '' || currentAmount === 0) {
+                alert("Terjadi kesalahan. Silakan buka ulang modal pembayaran.");
+                return;
+            }
+            
+            // File PHP harus berada di folder yang sama
+            const apiEndpoint = 'check_payment.php'; 
+            
+            const data = {
+                invoice_id: currentInvoiceId,
+                amount: currentAmount
+            };
+
+            const checkButton = document.querySelector('.modal-content .btn:last-child');
+            const originalText = checkButton.textContent;
+            checkButton.textContent = 'Memeriksa Status...';
+            checkButton.disabled = true;
+
+            fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                alert(`Hasil Pemeriksaan Server:\n\nStatus: ${result.status}\nPesan: ${result.message}`);
+                
+                if (result.status === 'success' || result.status === 'completed') {
+                    // Jika sukses, tutup modal dan beri notifikasi sukses
+                    closePaymentModal();
+                    alert("Pembayaran Terdeteksi & Lunas! Admin Anda telah menerima notifikasi Discord!");
+                }
+            })
+            .catch(error => {
+                alert('Gagal menghubungi server backend. Pastikan file check_payment.php sudah diunggah dan server berjalan.');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                checkButton.textContent = originalText;
+                checkButton.disabled = false;
+            });
+        }
+        // =========================================================
+
         function toggleCode(id) {
             const element = document.getElementById(id);
             if (element.style.display === 'none' || element.style.display === '') {
@@ -1951,28 +618,6 @@ end)
             } else {
                 element.style.display = 'none';
             }
-        }
-
-        function copyCode(id) {
-            const codeElement = document.getElementById(id);
-            const textToCopy = codeElement.innerText;
-            
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                alert('Kode berhasil disalin!');
-            }).catch(err => {
-                console.error('Gagal menyalin:', err);
-                const tempTextarea = document.createElement('textarea');
-                tempTextarea.value = textToCopy;
-                document.body.appendChild(tempTextarea);
-                tempTextarea.select();
-                try {
-                    document.execCommand('copy');
-                    alert('Kode berhasil disalin!');
-                } catch (e) {
-                    alert('Gagal menyalin kode. Silakan salin secara manual.');
-                }
-                document.body.removeChild(tempTextarea);
-            });
         }
     </script>
 </body>
